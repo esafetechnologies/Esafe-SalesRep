@@ -37,7 +37,7 @@ export const SCREENS = {
 export const TOPICS = [
   // Sell
   {
-    route: '/',
+    route: '/till',
     title: 'Add products',
     tour: 'sell',
     steps: [
@@ -49,7 +49,7 @@ export const TOPICS = [
     ],
   },
   {
-    route: '/',
+    route: '/till',
     title: 'The customer',
     steps: [
       ['Tap {add} at the top of the cart to find a customer by name, mobile or tax ID.', { add: 'Add a customer' }],
@@ -59,7 +59,7 @@ export const TOPICS = [
     ],
   },
   {
-    route: '/',
+    route: '/till',
     title: 'The salesperson',
     when: salespeople,
     steps: [
@@ -69,7 +69,7 @@ export const TOPICS = [
     ],
   },
   {
-    route: '/',
+    route: '/till',
     title: 'Change a line in the cart',
     steps: [
       'Tap a line to open it.',
@@ -79,7 +79,7 @@ export const TOPICS = [
     ],
   },
   {
-    route: '/',
+    route: '/till',
     title: 'Coupons, discounts and notes',
     steps: [
       ['{coupon}: type the code and tap Apply. Its offer applies at once.', { coupon: 'Coupon' }],
@@ -88,7 +88,7 @@ export const TOPICS = [
     ],
   },
   {
-    route: '/',
+    route: '/till',
     title: 'How the total is made',
     steps: [
       ['Tap {details} above the total to see how it is made.', { details: 'Details' }],
@@ -98,7 +98,7 @@ export const TOPICS = [
     ],
   },
   {
-    route: '/',
+    route: '/till',
     title: 'Park a sale and come back to it',
     steps: [
       ['{park} keeps the basket aside so you can serve the next customer.', { park: 'Park' }],
@@ -106,7 +106,7 @@ export const TOPICS = [
     ],
   },
   {
-    route: '/',
+    route: '/till',
     title: 'Take the payment',
     tour: 'sell',
     steps: [
@@ -118,7 +118,7 @@ export const TOPICS = [
     ],
   },
   {
-    route: '/',
+    route: '/till',
     title: 'Sell on account',
     when: sellsOnAccount,
     steps: [
@@ -129,7 +129,7 @@ export const TOPICS = [
     ],
   },
   {
-    route: '/',
+    route: '/till',
     title: 'Hold goods for a customer',
     when: (s) => Boolean(s.settings.enable_layaway) && s.permissions.can_hold_goods !== false,
     steps: [
@@ -139,7 +139,7 @@ export const TOPICS = [
     ],
   },
   {
-    route: '/',
+    route: '/till',
     title: 'Sell a gift card',
     steps: [
       'The gift button under the cart sells a gift card.',
@@ -148,7 +148,7 @@ export const TOPICS = [
     ],
   },
   {
-    route: '/',
+    route: '/till',
     title: 'Sell in another currency',
     tour: 'currency',
     when: (s) => s.saleCurrencies.length > 0,
@@ -161,7 +161,7 @@ export const TOPICS = [
     ],
   },
   {
-    route: '/',
+    route: '/till',
     title: 'When the connection drops',
     steps: [
       'Keep selling: sales wait on this device and go out by themselves once the connection is back.',
@@ -477,7 +477,7 @@ export const TOURS = {
   },
   sell: {
     title: 'Your first sale',
-    route: '/',
+    route: '/till',
     steps: [
       { target: 'register-pill', title: 'Open the shift first', text: 'No shift is open yet. Tap here, count the cash in the drawer and open it.', when: (s) => !s.registerOpen },
       { target: 'sell-search', title: 'Find a product', text: 'Type part of its name or code, or scan its barcode.' },
@@ -517,7 +517,7 @@ export const TOURS = {
   },
   currency: {
     title: 'Selling in another currency',
-    route: '/',
+    route: '/till',
     when: (s) => s.saleCurrencies.length > 0,
     steps: [
       { target: 'cart-currency', title: 'The currency', text: 'Switch a walk-in to the currency they pay in. A customer billed in another currency buys in it by themselves.' },
@@ -539,12 +539,12 @@ export const WHATS_NEW = [
   { version: '0.63.0', title: 'Refunds need a supervisor', text: 'A refund now waits for a supervisor\'s passcode or approved request before the money goes back.', route: '/history', when: (s) => (s.settings.refund_approval || 'Off') !== 'Off' && !s.permissions.is_manager },
   { version: '0.62.0', title: 'Products, profit, customers and outlets', text: 'Insights also shows what sold by item, group, brand and variant, the profit on it, your customers and how each outlet did.', route: '/insights', when: (s) => Boolean(s.permissions.sales_reports || s.permissions.profit_report) },
   { version: '0.62.0', title: 'Sales reports in Insights', text: 'Insights has two new tabs: a sales and cash summary for any period, and how each cashier did. Managers see them, and whoever you name under Permissions.', route: '/insights', when: (s) => Boolean(s.permissions.sales_reports || s.permissions.cashier_report) },
-  { version: '0.61.2', title: 'Other currencies on any sale', text: 'On a sale in your own currency, the amount can now be typed in another currency too. The line shows both figures, at the rate of the shift.', route: '/', when: (s) => s.saleCurrencies.length > 0 },
+  { version: '0.61.2', title: 'Other currencies on any sale', text: 'On a sale in your own currency, the amount can now be typed in another currency too. The line shows both figures, at the rate of the shift.', route: '/till', when: (s) => s.saleCurrencies.length > 0 },
   { version: '0.61.1', title: 'What a customer owes', text: 'Owes now shows only what the customer owes. Holds and orders not invoiced show on their own line, and still count against the credit limit.', route: '/customers', when: onAccount },
   { version: '0.61.1', title: 'The shift clock', text: 'The top bar shows how long the shift has been open as a clock, 07:01:20, on the site\'s time, whatever the device\'s time zone.' },
   { version: '0.61.0', title: 'Cash out under control', text: 'Putting money in and taking it out of the drawer are two permissions now. A cash out can need a reason and a manager\'s approval, by passcode or a request. Set it in Settings, General, Approvals and access, Cash out.', route: '/settings', when: manager },
   { version: '0.60.0', title: 'Sales on account', text: 'A customer can take the goods now and pay later. Turn it on in Settings, General, Sales on account, which says how it works, and name who may sell on account in Approvals and access, Permissions.', route: '/settings', when: manager },
-  { version: '0.60.0', title: 'Selling on account', text: 'At the payment screen, On account leaves what the customer does not pay now on their account. Their payments are taken in Customers.', route: '/', when: sellsOnAccount },
+  { version: '0.60.0', title: 'Selling on account', text: 'At the payment screen, On account leaves what the customer does not pay now on their account. Their payments are taken in Customers.', route: '/till', when: sellsOnAccount },
   { version: '0.59.0', title: 'A reason for a short or over', text: 'When a count at the close is short or over, the till asks why and keeps the reason with the shift. The shop sets the list in Settings, General, Register and shifts, and can make it required.', route: '/register', when: (s) => (s.settings.variance_reason_mode || 'Optional') !== 'Off' },
   { version: '0.58.1', title: 'Locked accounting periods', text: 'When an ERPNext accounting period locks sales invoices, the till now says so as a shift opens and explains a close it stops. Settings, System check lists such periods too.', route: '/register', when: (s) => manager(s) && Boolean(s.settings.warn_locked_periods) },
   { version: '0.58.0', title: 'Refunds to store credit', text: 'Before 0.58.0, saving the General settings switched off Allow refunding to Store Credit. If your shop refunds to store credit, switch it on again in Settings, General, Returns and refunds.', route: '/settings', when: (s) => Boolean(s.permissions.settings) },

@@ -7,7 +7,7 @@
       <img :src="esafeMark" alt="Esafe New Gen POS" />
     </div>
     <!-- The reports alone (0.65.0): Insights, the theme and the way back to ERPNext. -->
-    <router-link v-if="!session.reportsOnly" to="/" class="rail-item" exact-active-class="active">
+    <router-link v-if="!session.reportsOnly" to="/till" class="rail-item" exact-active-class="active">
       <svg viewBox="0 0 24 24"><path d="M7 18a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm10 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM3 2h2.5l3.1 11.6A2 2 0 0 0 10.5 15h8.2a2 2 0 0 0 1.9-1.4L23 6H6.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <span :class="fit(t('Sell'))">{{ t('Sell') }}</span>
     </router-link>

@@ -1,0 +1,1 @@
+function s(){let e=[];return{onKeydown(n){n.key&&n.key.length===1&&e.push(performance.now())},reset(){e=[]},isScan(n){const t=(n||"").length;return t===0||e.length!==t?!1:t===1?!0:(e[e.length-1]-e[0])/(t-1)<=70}}}export{s as c};

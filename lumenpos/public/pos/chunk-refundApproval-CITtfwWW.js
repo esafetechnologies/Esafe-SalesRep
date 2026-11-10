@@ -1,0 +1,1 @@
+function d(r,f,u){const a=(r==null?void 0:r.refund_approval)||"Off";return a==="Off"||f!=null&&f.is_manager||!(Number(u)>.005)?!1:a==="Always"?!0:Number(u)>(Number(r==null?void 0:r.refund_approval_amount)||0)+.005}export{d as r};

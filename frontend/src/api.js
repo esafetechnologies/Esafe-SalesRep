@@ -4,7 +4,13 @@
 import { locale } from './i18n'
 import { plainText } from './format'
 
-export class ApiError extends Error {}
+export class ApiError extends Error {
+  constructor(message, status, rejected) {
+    super(message)
+    this.status = status
+    this.rejected = rejected
+  }
+}
 
 // The network itself failed (no connection / server unreachable), distinct
 // from the server rejecting the request. Callers use this to switch the POS
@@ -88,7 +94,7 @@ export async function call(method, args = {}, options = {}) {
     }
   }
   if (!res.ok) {
-    throw new ApiError(extractMessage(data) || `Request failed (${res.status})`)
+    throw new ApiError(extractMessage(data) || `Request failed (${res.status})`, res.status, !!data.exc_type)
   }
   return data.message
 }

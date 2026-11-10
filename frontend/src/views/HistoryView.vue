@@ -391,7 +391,7 @@ function onExchangePicked(picked) {
   refundInvoice.value = null
   cart.startExchange(picked)
   session.notify(t('Now pick what the customer is taking instead'))
-  router.push('/')
+  router.push('/till')
 }
 
 async function onRefundDone(returnReceipt) {

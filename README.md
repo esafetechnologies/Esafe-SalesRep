@@ -1,4 +1,9 @@
-# EsafePOS: a professional Point of Sale for ERPNext / Frappe
+# Esafe Sales Rep for ERPNext / Frappe
+
+`/pos` opens the sales-rep workspace for product browsing, quotations, invoicing
+on account, payment collection, and location check-ins. See the
+[Sales Rep setup and workflow guide](docs/sales-rep-guide.md). The register opens
+at `/pos#/till`.
 
 > 📘 **[Full user guide & documentation → docs/user-guide.md](docs/user-guide.md)**
 > (setup, every feature in detail, settings reference, troubleshooting, changelog,
@@ -20,7 +25,7 @@ companies), salesperson search by name or number, a **local-first catalog**
 (IndexedDB-served search, near-instant), and a **EsafePOS workspace** in the
 ERPNext desk. Brand accent color: `#2E5BFF`.
 
-- Sell screen at **`/pos`**: product grid + search/barcode, cart with live
+- Till at **`/pos#/till`**: product grid + search/barcode, cart with live
   promotion badges, customer lookup/create, park & retrieve sales, split
   payments with quick-cash buttons, change due, printable receipt,
   salesperson attribution (posted to the invoice Sales Team for commission
@@ -87,7 +92,8 @@ bench --site yoursite clear-cache
 If you change anything under `frontend/src`, rebuild and commit the assets:
 `cd frontend && npm install && npm run build`.
 
-Open **`https://yoursite/pos`**, enter an opening float, and sell.
+Open **`https://yoursite/pos`** for field sales. For register sales, open
+**`https://yoursite/pos#/till`** and enter an opening float.
 
 ## Creating promotions
 

@@ -10,17 +10,16 @@ app_license = "AGPL-3.0-only"
 
 required_apps = ["erpnext"]
 
-# Frappe's apps screen (/apps, Frappe 15 and 16) and the Frappe 16 desk list an
-# app only when it declares itself here. Shown to whoever may open the till.
+# Frappe's apps screen opens the field sales workspace for users with sales access.
 # The Frappe 16 desk tile and sidebar are the files in desktop_icon/ and
 # workspace_sidebar/, which Frappe 16 imports on every migrate.
 add_to_apps_screen = [
     {
         "name": app_name,
         "logo": "/assets/lumenpos/pos/icon-192.png",
-        "title": app_title,
+        "title": "Esafe Sales Rep",
         "route": "/pos",
-        "has_permission": "lumenpos.api.session.can_open_till",
+        "has_permission": "lumenpos.api.sales_rep.can_open_workspace",
     }
 ]
 

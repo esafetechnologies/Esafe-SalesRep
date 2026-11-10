@@ -1,42 +1,44 @@
 // Copyright (c) 2026 Esafe (PVT) LTD
 // SPDX-License-Identifier: AGPL-3.0-only
 // "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md.
-import { createApp } from 'vue'
+import { createApp, h } from 'vue'
 import { createPinia } from 'pinia'
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHashHistory, RouterView } from 'vue-router'
 
-import './theme' // applies saved/OS theme before first paint
-import { ready } from './i18n' // applies saved/browser language + RTL direction before first paint
-import App from './App.vue'
-import SellView from './views/SellView.vue'
-import HistoryView from './views/HistoryView.vue'
-import CustomersView from './views/CustomersView.vue'
-import HoldsView from './views/HoldsView.vue'
-import RegisterView from './views/RegisterView.vue'
-import InsightsView from './views/InsightsView.vue'
-import SettingsView from './views/SettingsView.vue'
-import LabelsView from './views/LabelsView.vue'
-import StockCountView from './views/StockCountView.vue'
-import CustomerDisplayView from './views/CustomerDisplayView.vue'
+import './theme'
+import { ready } from './i18n'
+import SalesRepView from './views/SalesRepView.vue'
 import './styles.css'
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
-    { path: '/', component: SellView },
-    { path: '/history', component: HistoryView },
-    { path: '/customers', component: CustomersView },
-    { path: '/holds', component: HoldsView },
-    { path: '/register', component: RegisterView },
-    { path: '/insights', component: InsightsView },
-    { path: '/settings', component: SettingsView },
-    { path: '/labels', component: LabelsView },
-    { path: '/count', component: StockCountView },
-    // Second-screen customer-facing display, chrome-free, no bootstrap.
-    { path: '/display', component: CustomerDisplayView },
+    {
+      path: '/',
+      component: SalesRepView,
+      children: [
+        { path: 'quotations', name: 'rep-quotations', meta: { repPage: 'quotations' } },
+        { path: 'invoices', name: 'rep-invoices', meta: { repPage: 'invoices' } },
+        { path: 'activity', name: 'rep-activity', meta: { repPage: 'activity' } },
+      ],
+    },
+    {
+      path: '/till',
+      component: () => import('./App.vue'),
+      children: [
+        { path: '', component: () => import('./views/SellView.vue') },
+        { path: '/history', component: () => import('./views/HistoryView.vue') },
+        { path: '/customers', component: () => import('./views/CustomersView.vue') },
+        { path: '/holds', component: () => import('./views/HoldsView.vue') },
+        { path: '/register', component: () => import('./views/RegisterView.vue') },
+        { path: '/insights', component: () => import('./views/InsightsView.vue') },
+        { path: '/settings', component: () => import('./views/SettingsView.vue') },
+        { path: '/labels', component: () => import('./views/LabelsView.vue') },
+        { path: '/count', component: () => import('./views/StockCountView.vue') },
+        { path: '/display', component: () => import('./views/CustomerDisplayView.vue') },
+      ],
+    },
   ],
 })
 
-// A language outside the main bundle is fetched first, so the first screen is
-// already in it (English and Arabic resolve at once).
-ready.finally(() => createApp(App).use(createPinia()).use(router).mount('#app'))
+ready.finally(() => createApp({ render: () => h(RouterView) }).use(createPinia()).use(router).mount('#app'))

@@ -143,7 +143,7 @@
         <!-- The open-register prompt only blocks the Sell screen; the nav
              rail and other tabs (Register, History, Settings) stay usable. -->
         <!-- A tour shows the Sell screen under it, so the prompt steps aside. -->
-        <OpenRegisterOverlay v-if="!session.reportsOnly && !session.registerOpen && route.path === '/' && !help.tourId" />
+        <OpenRegisterOverlay v-if="!session.reportsOnly && !session.registerOpen && route.path === '/till' && !help.tourId" />
       </main>
     </div>
     <div v-if="session.toast" class="toast" :class="{ error: session.toast.isError }">
@@ -330,7 +330,7 @@ function publishDisplaySnapshot() {
 const pageTitle = computed(
   () =>
     ({
-      '/': t('Sell'),
+      '/till': t('Sell'),
       '/history': t('Sales History'),
       '/customers': t('Customers'),
       '/holds': t('Holds'),
