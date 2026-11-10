@@ -31,11 +31,22 @@ the `lumen_reports.integrations.esafe_salesrep` contract.
 
 ## Work in the field
 
-- **Catalog.** Search by item name or code, filter by brand and item group, enlarge item photos, and check the selling list price. Use **Review total** after selecting a customer and quantities to calculate the document with ERPNext pricing rules and taxes.
+- **Catalog.** Search by item name or code, filter by brand and item group, enlarge item photos, and check the selling list price. On a phone, tap **View sale** after adding an item. Use **Review total** after selecting a customer and quantities to see ERPNext's final item prices, offers, taxes, and total.
 - **Quotations.** Select **Quotation**, optionally enter a validity date, and submit. Open the document in ERPNext to use the standard quotation-to-sales-order workflow, or use **Print** to share a copy.
 - **Invoices.** Select **Invoice**, choose a due date if needed, and submit. The invoice posts on account. Fulfil stock through ERPNext's delivery workflow. The Invoices tab shows status, balances, and due dates, with filters for outstanding invoices, sold item code, and brand.
-- **Negotiation.** Add an extra percentage discount before reviewing the total. Esafe-SalesRep price-edit access and configured discount limits apply. Passcode-enabled policies accept a manager passcode. If the policy requires a remote approval request, handle the exception in ERPNext.
+- **Negotiation.** Add an extra percentage discount before reviewing the total. An automatic ERPNext order discount takes precedence over the extra discount. Automatic item discounts can combine with an extra discount when no automatic order discount applies. Esafe-SalesRep price-edit access and configured discount limits apply to negotiation. Passcode-enabled policies accept a manager passcode. If the policy requires a remote approval request, handle the exception in ERPNext.
 - **Payments.** Open an outstanding invoice and record the amount actually received. A partial Payment Entry reduces the balance and leaves the rest due. Use ERPNext Desk for cross-currency receipts, payment-term allocations, early-payment discounts, or collection by another user.
 - **Activity.** Select **Check in with location** to save your current coordinates and estimated accuracy with the server timestamp. This requires HTTPS and browser location permission. The activity log also records who submitted documents and payments. Authorized Esafe-SalesRep managers can switch to team activity for the selected profile. Location is collected only when a rep checks in.
 
 The workspace needs an active ERPNext connection for catalog and transaction data. If a transaction response is lost, use **Retry request** while the page is open. This reuses the same request key to avoid creating a duplicate.
+
+## Check pricing before rollout
+
+On a staging site, use the same company, customer, warehouse, price list, item
+UOM, quantities, and tax settings in Sales Rep and ERPNext Desk. Compare both
+the reviewed and submitted line prices, taxes, and rounded total. Exercise the
+pricing rules the site uses, including an eligible and ineligible order for
+each quantity threshold. Where configured, include a brand discount, a
+customer group price list, a whole-order discount, and a promotional item. Test
+a partial payment against a submitted invoice and verify its remaining balance
+in ERPNext.

@@ -22,7 +22,7 @@
     <main class="rep-main">
       <p v-if="notice" class="rep-notice" role="status">{{ notice }}</p>
       <p v-if="error" class="rep-error" role="alert">{{ error }}</p>
-      <div v-if="pending && !busy" class="rep-notice rep-actions">
+      <div v-if="pending && !busy && (pending.method !== 'post_document' || page !== 'catalog')" class="rep-notice rep-actions">
         <span>The server did not confirm the result. Retry the same request to check or finish it.</span>
         <button class="rep-primary" @click="sendPending">Retry request</button>
       </div>
@@ -40,8 +40,8 @@
         <section class="rep-panel rep-catalog" aria-labelledby="catalog-title">
           <div class="rep-heading">
             <div><h1 id="catalog-title">Product catalog</h1><p>{{ catalog.price_list || 'Browse items and selling prices' }}</p></div>
-            <button v-if="lines.length" class="rep-jump" @click="orderPanel?.scrollIntoView()">View sale ({{ lines.length }})</button>
           </div>
+          <p class="rep-catalog-hint">Catalog prices are list prices. Review the sale to see your customer's final prices and offers.</p>
           <div class="rep-filters">
             <label>Search products<input v-model="query" type="search" placeholder="Item name or code"></label>
             <label>Brand<select v-model="brand" aria-label="Brand"><option value="">All brands</option><option v-for="value in filters.brand" :key="value">{{ value }}</option></select></label>
@@ -69,7 +69,10 @@
         </section>
 
         <section v-if="canSell" ref="orderPanel" class="rep-panel rep-order" aria-labelledby="order-title">
-          <div class="rep-heading"><div><h2 id="order-title">New sale</h2><p>Build a quotation or invoice for a customer.</p></div></div>
+          <div class="rep-heading">
+            <div><h2 id="order-title" tabindex="-1">New sale</h2><p>Build a quotation or invoice for a customer.</p></div>
+            <button class="rep-back-products" @click="backToProducts">Back to products</button>
+          </div>
           <fieldset :disabled="!!pending || busy">
             <div class="rep-switch" aria-label="Document type">
               <button v-if="access('quotation', 'post')" :aria-pressed="kind === 'quotation'" @click="kind = 'quotation'">Quotation</button>
@@ -100,21 +103,43 @@
             <label v-if="requiresPasscode">Manager passcode <input v-model="passcode" type="password" autocomplete="off"></label>
             <p v-if="needsDeskApproval" class="rep-hint">This discount requires approval. Complete it in ERPNext.</p>
             <div class="rep-total">
-              <dl v-if="estimate">
+              <template v-if="estimate">
+                <ul v-if="estimate.items?.length" class="rep-priced-items" aria-label="Reviewed item prices">
+                  <li v-for="(item, index) in estimate.items" :key="index">
+                    <div>
+                      <strong>{{ item.item_name || item.item_code }}</strong>
+                      <small>{{ item.qty }} {{ item.uom }} × {{ money(item.rate, estimate.currency) }}</small>
+                      <small v-if="item.is_promotional_item">Promotional item</small>
+                      <small v-else-if="item.discount_percentage">{{ item.discount_percentage }}% item discount</small>
+                      <small v-else-if="item.pricing_rule_applied">Pricing rule applied</small>
+                    </div>
+                    <strong>{{ money(item.amount, estimate.currency) }}</strong>
+                  </li>
+                </ul>
+                <dl>
                 <div><dt>Net total</dt><dd>{{ money(estimate.net_total, estimate.currency) }}</dd></div>
                 <div><dt>Taxes</dt><dd>{{ money(estimate.taxes, estimate.currency) }}</dd></div>
-                <div v-if="estimate.discount"><dt>Extra discount applied</dt><dd>{{ money(estimate.discount, estimate.currency) }}</dd></div>
+                <div v-if="estimate.discount"><dt>{{ estimate.automatic_order_discount ? 'Automatic order discount included' : 'Extra discount included' }}</dt><dd>{{ money(estimate.discount, estimate.currency) }}</dd></div>
                 <div><dt>Total</dt><dd>{{ money(estimate.total, estimate.currency) }}</dd></div>
-              </dl>
-              <p v-else>Review the ERPNext total before submitting.</p>
+                </dl>
+                <p v-if="estimate.automatic_order_discount && Number(discount)" class="rep-hint">The automatic order discount replaces the extra discount.</p>
+              </template>
+              <p v-else>{{ customer && lines.length ? 'Review the ERPNext total before submitting.' : 'Select a customer and add items to review the total.' }}</p>
             </div>
+            <p v-if="saleError" class="rep-error" role="alert">{{ saleError }}</p>
             <div class="rep-actions">
               <button :disabled="!readyToReview" @click="review">{{ reviewing ? 'Calculating…' : 'Review total' }}</button>
               <button class="rep-primary" :disabled="!estimate || !readyToReview || needsDeskApproval || (requiresPasscode && !passcode)"
                 @click="saveSale">{{ kind === 'quotation' ? 'Submit quotation' : 'Create invoice' }}</button>
             </div>
           </fieldset>
+          <div v-if="pending?.method === 'post_document' && !busy" class="rep-notice rep-actions">
+            <button class="rep-primary" @click="sendPending">Retry request</button>
+          </div>
         </section>
+        <div v-if="lines.length" class="rep-mobile-sale" :class="{ 'at-order': orderInView }">
+          <button class="rep-primary" @click="openOrder">View sale ({{ lines.length }})</button>
+        </div>
       </div>
 
       <section v-else class="rep-panel rep-records" aria-labelledby="records-title">
@@ -146,9 +171,9 @@
             <thead><tr><th>Server time</th><th>Rep</th><th>Activity</th><th>Document</th><th>Location</th></tr></thead>
             <tbody>
               <tr v-for="row in records" :key="row.name">
-                <td>{{ row.creation?.slice(0, 19) }}</td><td>{{ row.sales_person || row.owner }}</td><td>{{ row.action }}</td>
-                <td><a v-if="row.reference_name" :href="desk(row.action, row.reference_name)">{{ row.reference_name }}</a><span v-else>—</span></td>
-                <td v-if="row.action === 'Check-in'">{{ coordinate(row.latitude) }}, {{ coordinate(row.longitude) }} <small>±{{ Math.round(row.accuracy) }} m</small></td><td v-else>—</td>
+                <td data-label="Server time">{{ row.creation?.slice(0, 19) }}</td><td data-label="Rep">{{ row.sales_person || row.owner }}</td><td data-label="Activity">{{ row.action }}</td>
+                <td data-label="Document"><a v-if="row.reference_name" :href="desk(row.action, row.reference_name)">{{ row.reference_name }}</a><span v-else>—</span></td>
+                <td data-label="Location" v-if="row.action === 'Check-in'">{{ coordinate(row.latitude) }}, {{ coordinate(row.longitude) }} <small>±{{ Math.round(row.accuracy) }} m</small></td><td data-label="Location" v-else>—</td>
               </tr>
             </tbody>
           </table>
@@ -157,10 +182,10 @@
             <tbody>
               <tr v-for="row in records" :key="row.name">
                 <td><a :href="desk(documentType, row.name)">{{ row.name }}</a><small>{{ row.customer_name }}</small></td>
-                <td>{{ row.posting_date || row.transaction_date }}</td><td>{{ row.due_date || row.valid_till || '—' }}</td>
-                <td><span class="rep-status" :class="{ due: row.outstanding_amount > 0 }">{{ row.status }}</span></td>
-                <td>{{ money(row.rounded_total || row.grand_total, row.currency) }}</td>
-                <td v-if="page === 'invoices'">{{ money(row.outstanding_amount, row.outstanding_currency) }}</td>
+                <td data-label="Date">{{ row.posting_date || row.transaction_date }}</td><td :data-label="page === 'invoices' ? 'Due date' : 'Valid until'">{{ row.due_date || row.valid_till || '—' }}</td>
+                <td data-label="Status"><span class="rep-status" :class="{ due: row.outstanding_amount > 0 }">{{ row.status }}</span></td>
+                <td data-label="Total">{{ money(row.rounded_total || row.grand_total, row.currency) }}</td>
+                <td v-if="page === 'invoices'" data-label="Outstanding">{{ money(row.outstanding_amount, row.outstanding_currency) }}</td>
                 <td><div class="rep-row-actions">
                   <a v-if="row.docstatus === 1" :href="printLink(documentType, row.name)" target="_blank" rel="noopener">Print</a>
                   <button v-if="page === 'invoices' && setup.can_pay && row.owner === setup.user && row.outstanding_amount > 0 && row.docstatus === 1"
@@ -237,6 +262,8 @@ const brokenImages = ref(new Set())
 const photo = ref(null)
 const photoDialog = ref(null)
 const orderPanel = ref(null)
+const orderInView = ref(false)
+const saleError = ref('')
 const kind = ref('quotation')
 const customerSearch = ref('')
 const customer = ref(null)
@@ -264,7 +291,8 @@ const referenceRequired = computed(() => payment.value?.modes.find(mode => mode.
 const readyToReview = computed(() => !!customer.value && !!lines.value.length &&
   lines.value.every(line => Number.isFinite(line.qty) && line.qty >= 0.000001) &&
   Number(discount.value) >= 0 && Number(discount.value) <= 100 && !reviewing.value && !checkingIn.value)
-const overLimit = computed(() => setup.value?.discount_limit > 0 && Number(discount.value) > setup.value.discount_limit)
+const overLimit = computed(() => !estimate.value?.automatic_order_discount &&
+  setup.value?.discount_limit > 0 && Number(discount.value) > setup.value.discount_limit)
 const needsDeskApproval = computed(() => overLimit.value && setup.value.discount_approval === 'Request only')
 const requiresPasscode = computed(() => overLimit.value && !needsDeskApproval.value)
 
@@ -272,6 +300,7 @@ let requestVersion = 0
 let searchTimer
 let customerTimer
 let active = true
+let catalogScroll = 0
 
 function money(amount, currency) {
   if (!currency || amount == null) return '—'
@@ -289,6 +318,14 @@ function coordinate(value) {
 function openPhoto(item) {
   photo.value = item
   photoDialog.value.showModal()
+}
+function openOrder() {
+  catalogScroll = window.scrollY
+  orderPanel.value?.scrollIntoView({ block: 'start' })
+  orderPanel.value?.querySelector('h2')?.focus({ preventScroll: true })
+}
+function backToProducts() {
+  window.scrollTo(0, catalogScroll)
 }
 function add(item) {
   const existing = lines.value.find(line => line.name === item.name)
@@ -402,19 +439,33 @@ watch([customerSearch, profileName], ([search, name]) => {
 
 watch([lines, discount, customer, note, documentDate, kind], () => {
   estimate.value = null
+  saleError.value = ''
 }, { deep: true })
 watch(kind, () => { documentDate.value = ''; passcode.value = '' })
+watch(page, () => {
+  catalogScroll = 0
+  window.scrollTo(0, 0)
+}, { flush: 'post' })
+watch(orderPanel, (panel, previous, onCleanup) => {
+  orderInView.value = false
+  if (!panel || !window.IntersectionObserver) return
+  const observer = new IntersectionObserver(([entry]) => {
+    orderInView.value = entry.isIntersecting
+  })
+  observer.observe(panel)
+  onCleanup(() => observer.disconnect())
+})
 
 async function review() {
   reviewing.value = true
-  error.value = ''
+  saleError.value = ''
   const payload = salePayload()
   const target = kind.value
   try {
     const result = await call('esafe_salesrep.api.sales_rep.preview', scope({ kind: target, payload }))
     if (target === kind.value && JSON.stringify(payload) === JSON.stringify(salePayload())) estimate.value = result
   } catch (e) {
-    error.value = e.message
+    saleError.value = e.message
   } finally {
     reviewing.value = false
   }
@@ -437,6 +488,7 @@ async function sendPending() {
   busy.value = true
   error.value = ''
   paymentError.value = ''
+  saleError.value = ''
   notice.value = ''
   try {
     const result = await commands[method](args, { timeout: 25000 })
@@ -470,6 +522,7 @@ async function sendPending() {
     }
     const message = pending.value ? 'The request result could not be confirmed.' : e.message
     if (method === 'record_payment') paymentError.value = message
+    else if (method === 'post_document' && page.value === 'catalog') saleError.value = message
     else error.value = message
   } finally {
     busy.value = false
@@ -479,7 +532,12 @@ async function sendPending() {
 function saveSale() {
   submit('post_document', {
     kind: kind.value,
-    payload: { ...salePayload(), reviewed_total: estimate.value.total, reviewed_currency: estimate.value.currency },
+    payload: {
+      ...salePayload(),
+      reviewed_total: estimate.value.total,
+      reviewed_currency: estimate.value.currency,
+      reviewed_pricing: estimate.value.pricing_signature,
+    },
     passcode: passcode.value || undefined,
   })
 }

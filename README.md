@@ -5,6 +5,8 @@ on account, payment collection, and location check-ins. See the
 [Sales Rep setup and workflow guide](docs/sales-rep-guide.md). The register opens
 at `/pos#/till`.
 
+See the [changelog](CHANGELOG.md) for the current workflow, release history, and deployment notes.
+
 > 📘 **[Full user guide & documentation → docs/user-guide.md](docs/user-guide.md)**
 > (setup, every feature in detail, settings reference, troubleshooting, changelog,
 > kept up to date with every release)

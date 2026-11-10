@@ -35,13 +35,25 @@ function reply(method, args, res) {
   }
   if (method === 'customers') return [customer]
   if (method === 'preview') {
-    const base = args.payload.items.reduce((sum, row) => sum + items.find(item => item.name === row.item_code).price * row.qty, 0)
-    const discount = base * args.payload.discount / 100
-    return { total: base - discount, currency: 'LKR', net_total: base - discount, taxes: 0, discount }
+    const priced = args.payload.items.map(row => {
+      const item = items.find(candidate => candidate.name === row.item_code)
+      const rate = item.price * 0.9
+      return { item_code: item.name, item_name: item.item_name, uom: item.uom, qty: row.qty,
+        rate, amount: rate * row.qty, discount_percentage: 10 }
+    })
+    const base = priced.reduce((sum, row) => sum + row.amount, 0)
+    const automatic = args.kind === 'invoice' ? base * 0.1 : 0
+    const discount = automatic || base * args.payload.discount / 100
+    priced.push({ item_code: 'BONUS', item_name: 'Promotional wrench', uom: 'Nos', qty: 1,
+      rate: 0, amount: 0, is_promotional_item: true })
+    return { total: base - discount, currency: 'LKR', net_total: base - discount, taxes: 0, discount,
+      automatic_order_discount: automatic, items: priced, pricing_signature: 'reviewed-' + args.kind }
   }
   if (method === 'post_document') {
     const name = args.kind === 'quotation' ? 'QTN-0001' : 'SINV-0001'
     const invoice = args.kind === 'invoice'
+    assert.equal(args.payload.reviewed_total, invoice ? 136080 : 143640)
+    assert.equal(args.payload.reviewed_pricing, 'reviewed-' + args.kind)
     rows.push({
       ...customer, name, owner: user, currency: 'LKR', grand_total: args.payload.reviewed_total,
       docstatus: 1, status: invoice ? 'Unpaid' : 'Open', posting_date: '2026-11-10',
@@ -115,7 +127,8 @@ try {
     headless: true, ...(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : { channel: 'chrome' }),
   })
   const page = await browser.newPage({
-    viewport: { width: 1440, height: 900 },
+    viewport: { width: 390, height: 844 },
+    hasTouch: true,
     geolocation: { latitude: 6.9271, longitude: 79.8612, accuracy: 8 },
     permissions: ['geolocation'],
   })
@@ -144,51 +157,64 @@ try {
   await pump.getByRole('button', { name: 'Enlarge photo of Water pump 3 inch' }).click()
   await page.getByRole('dialog', { name: 'Water pump 3 inch' }).waitFor()
   await page.getByRole('button', { name: 'Close photo' }).click()
-  async function buildSale() {
+  async function buildSale(invoice = false) {
     await pump.getByRole('button', { name: '+ Add' }).click()
+    if (!invoice) await page.getByRole('button', { name: 'View sale (1)', exact: true }).tap()
     await page.getByLabel('Customer', { exact: true }).fill('Greenfield')
     await page.getByRole('button', { name: /Greenfield Farm/ }).click()
     await page.getByLabel('Extra discount (%)').fill('5')
     await page.getByRole('button', { name: 'Review total' }).click()
-    await page.getByText(/159,600/).first().waitFor()
+    await page.getByText(invoice ? /136,080/ : /143,640/).first().waitFor()
+    await page.getByText('10% item discount', { exact: true }).waitFor()
+    await page.getByText('Promotional wrench', { exact: true }).waitFor()
+  }
+  async function assertNoOverflow() {
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true)
   }
   await buildSale()
   await pump.waitFor()
   const output = process.env.SALES_REP_ARTIFACTS
   if (output) {
     await mkdir(output, { recursive: true })
-    await page.screenshot({ path: join(output, 'sales-rep-desktop.png') })
-    await page.setViewportSize({ width: 390, height: 844 })
-    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth), 390)
     await page.screenshot({ path: join(output, 'sales-rep-mobile.png'), fullPage: true })
-    await page.setViewportSize({ width: 1440, height: 900 })
   }
+  await assertNoOverflow()
   await page.getByRole('button', { name: 'Submit quotation' }).click()
   await page.getByRole('link', { name: 'QTN-0001' }).waitFor()
   console.log('PASS catalog and quotation')
+  await page.setViewportSize({ width: 768, height: 1024 })
   await page.getByRole('link', { name: 'Catalog', exact: true }).click()
   await page.getByRole('button', { name: 'Invoice', exact: true }).click()
-  await buildSale()
+  await buildSale(true)
+  await page.getByText('Automatic order discount included', { exact: true }).waitFor()
+  await page.getByText('The automatic order discount replaces the extra discount.', { exact: true }).waitFor()
+  await assertNoOverflow()
+  if (output) await page.screenshot({ path: join(output, 'sales-rep-tablet.png'), fullPage: true })
+  await page.setViewportSize({ width: 1024, height: 768 })
+  await assertNoOverflow()
   await page.getByLabel('Due date').fill('2026-11-30')
   await page.getByRole('button', { name: 'Review total' }).click()
   await page.getByRole('button', { name: 'Create invoice' }).click()
   await page.getByRole('link', { name: 'SINV-0001' }).waitFor()
   console.log('PASS outstanding invoice')
+  await page.setViewportSize({ width: 360, height: 800 })
   await page.getByLabel('Outstanding only').check()
+  await assertNoOverflow()
+  assert.equal(await page.locator('.rep-table').evaluate(el => el.scrollWidth <= el.clientWidth), true)
   await page.getByRole('button', { name: 'Record payment' }).click()
   await page.getByLabel('Amount (LKR)').fill('10000')
   await page.getByRole('button', { name: 'Submit payment' }).click()
   await page.getByRole('button', { name: 'Retry payment request' }).click()
   await page.getByText('Partly Paid').waitFor()
   assert.deepEqual(attempts, [paymentKey, paymentKey])
-  assert.equal(rows.find(row => row.name === 'SINV-0001').outstanding_amount, 149600)
+  assert.equal(rows.find(row => row.name === 'SINV-0001').outstanding_amount, 126080)
   console.log('PASS partial payment and retry')
   await page.getByRole('link', { name: 'Activity', exact: true }).click()
   await page.getByRole('button', { name: 'Check in with location' }).click()
   await page.getByText(/Check-in recorded/).waitFor()
   await page.getByText(/6.92710, 79.86120/).waitFor()
   assert.deepEqual(errors, [])
-  console.log('PASS catalog, photo, quotation, invoice, payment retry, GPS check-in and mobile width')
+  console.log('PASS automatic discounts, promotional items and touch layouts at 360, 390, 768 and 1024 px')
 } finally {
   await browser?.close()
   server.close()

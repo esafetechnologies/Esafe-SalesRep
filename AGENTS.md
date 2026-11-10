@@ -29,4 +29,6 @@ Add focused `unittest` cases named `test_<behavior>` beside the affected Python 
 
 Recent commits use concise imperative summaries, often version-prefixed (for example, `0.69.0: stock count from the till`) or scoped documentation prefixes such as `docs(website-guide): ...`. Keep commits focused.
 
+Update the root `CHANGELOG.md` in the same change as each repository update. Add a dated entry under **Unreleased** with what changed and how it works. Include setup or migration steps, verification, and any known limits when relevant. Refresh **How it works today** when a workflow changes. Move shipped entries into a versioned section at release.
+
 PRs should state the user impact, list verification commands, link the issue when applicable, and include screenshots for UI changes. Commit regenerated `esafe_salesrep/public/pos/` assets with source changes under `frontend/src/`.

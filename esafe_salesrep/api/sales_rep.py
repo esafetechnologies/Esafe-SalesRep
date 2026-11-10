@@ -90,7 +90,13 @@ def _customer(customer):
 
 
 def _price_list(profile, customer=None):
-    return (customer and customer.get("default_price_list")) or profile.selling_price_list
+    from erpnext.accounts.party import get_default_price_list
+
+    return (
+        (customer and get_default_price_list(customer))
+        or profile.selling_price_list
+        or frappe.db.get_single_value("Selling Settings", "selling_price_list")
+    )
 
 
 @frappe.whitelist()
@@ -213,20 +219,67 @@ def _document(profile, kind, payload):
     for row in doc.items:
         if not row.get("is_free_item") and flt(row.rate) <= 0 and flt(row.price_list_rate) <= 0:
             frappe.throw(_("No selling price was found for {0}. Set its price in ERPNext.").format(row.item_code))
-    if discount:
-        doc.apply_discount_on = "Net Total"
-        doc.additional_discount_percentage = discount
-    doc.run_method("calculate_taxes_and_totals")
+    _apply_pricing(doc, discount)
     return doc
 
 
+def _apply_pricing(doc, discount):
+    from erpnext.accounts.doctype.pricing_rule.utils import apply_pricing_rule_on_transaction
+
+    # ERPNext prices item rows when it fills defaults. Whole-order rules run
+    # later, after it has calculated the quantities and totals they depend on.
+    doc.run_method("calculate_taxes_and_totals")
+    if not doc.get("ignore_pricing_rule"):
+        apply_pricing_rule_on_transaction(doc)
+    automatic_discount = flt(doc.discount_amount)
+    doc.flags.sales_rep_automatic_discount = automatic_discount
+    # ERPNext uses the same document fields for both discounts. An automatic
+    # order discount takes precedence. Item rules still combine with an extra
+    # discount when the order itself has no automatic discount.
+    if discount and not automatic_discount:
+        doc.apply_discount_on = "Net Total"
+        doc.additional_discount_percentage = discount
+        doc.run_method("calculate_taxes_and_totals")
+
+
 def _totals(doc):
-    return {
+    totals = {
         "name": doc.name, "currency": doc.currency, "net_total": doc.net_total,
         "taxes": doc.total_taxes_and_charges,
         "total": flt(doc.grand_total if doc.is_rounded_total_disabled() else doc.rounded_total),
         "discount": doc.discount_amount,
+        "automatic_order_discount": flt(doc.flags.get("sales_rep_automatic_discount")),
+        "items": [
+            {
+                "item_code": row.item_code, "item_name": row.item_name,
+                "qty": flt(row.qty), "uom": row.uom, "rate": flt(row.rate),
+                "amount": flt(row.amount), "discount_percentage": flt(row.discount_percentage),
+                "pricing_rule_applied": bool(row.get("pricing_rules")),
+                "is_promotional_item": bool(row.get("is_free_item")),
+            }
+            for row in doc.items
+        ],
     }
+    # Two different prices can produce the same rounded total. Also compare
+    # item rates, promotional quantities, discount and tax before posting.
+    reviewed = [
+        [flt(totals[field]) for field in ("net_total", "taxes", "discount")],
+        sorted(
+            (row["item_code"], row["uom"] or "", row["qty"], row["rate"], row["amount"],
+             row["discount_percentage"], row["is_promotional_item"])
+            for row in totals["items"]
+        ),
+    ]
+    totals["pricing_signature"] = hashlib.sha256(json.dumps(reviewed).encode()).hexdigest()
+    return totals
+
+
+def _verify_reviewed_pricing(doc, payload):
+    totals = _totals(doc)
+    if (totals["currency"] != payload.get("reviewed_currency")
+            or totals["total"] != _number(payload.get("reviewed_total"), _("reviewed total"), 0)
+            or (payload.get("reviewed_pricing") and totals["pricing_signature"] != payload["reviewed_pricing"])):
+        frappe.throw(_("ERPNext recalculated the pricing. Review the latest price and try again."))
 
 
 @frappe.whitelist()
@@ -274,15 +327,14 @@ def post_document(pos_profile, kind, payload, request_key, passcode=None):
     from esafe_salesrep.api.sales import _check_discount_passcode
 
     _check_discount_passcode({
-        "pos_profile": profile.name, "order_discount_percent": payload.get("discount"),
+        "pos_profile": profile.name,
+        "order_discount_percent": 0 if doc.flags.sales_rep_automatic_discount else payload.get("discount"),
         "discount_passcode": passcode,
     })
     doc.insert()
+    _verify_reviewed_pricing(doc, payload)
     doc.submit()
-    totals = _totals(doc)
-    if (totals["currency"] != payload.get("reviewed_currency")
-            or totals["total"] != _number(payload.get("reviewed_total"), _("reviewed total"), 0)):
-        frappe.throw(_("ERPNext recalculated the total. Review the latest price and try again."))
+    _verify_reviewed_pricing(doc, payload)
     note = str(payload.get("note") or "").strip()[:1000]
     if note:
         doc.add_comment("Comment", text=escape_html(note))

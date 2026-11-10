@@ -61,6 +61,7 @@
 [data-theme='dark'] .rep .rep-primary { color: var(--nav-bg); }
 .rep-button { display: inline-flex; align-items: center; text-decoration: none; white-space: nowrap; }
 .rep-filters { display: grid; grid-template-columns: minmax(0, 2fr) repeat(2, minmax(0, 1fr)); gap: 10px; margin-bottom: 16px; }
+.rep .rep-catalog-hint { color: var(--text-muted); font-size: 13px; margin-bottom: 12px; }
 .rep-products { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 185px), 1fr)); gap: 12px; }
 .rep-product { min-width: 0; display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
 .rep .rep-photo {
@@ -118,6 +119,10 @@
 .rep-total p, .rep .rep-hint { color: var(--text-muted); font-size: 13px; }
 .rep-total dl div { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; padding: 3px 0; }
 .rep-total dl div:last-child { font-size: 17px; font-weight: 750; margin-top: 4px; }
+.rep-priced-items { padding: 0; margin: 0 0 10px; list-style: none; }
+.rep-priced-items li { display: flex; justify-content: space-between; align-items: start; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--border); overflow-wrap: anywhere; }
+.rep-priced-items li > strong { text-align: end; }
+.rep-total .rep-hint { margin-top: 8px; }
 .rep-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .rep-order .rep-actions button { flex: 1; }
 .rep .rep-error, .rep .rep-notice { padding: 12px 14px; margin-bottom: 12px; border: 1px solid var(--border); border-radius: 7px; background: var(--card-bg); }
@@ -138,16 +143,40 @@
 .rep-status.due { border-color: var(--amber); }
 .rep-row-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .rep-row-actions button { min-height: 34px; }
-.rep-dialog { width: min(540px, calc(100% - 26px)); max-height: 90vh; padding: 18px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--card-bg); color: var(--text); }
+.rep-dialog { width: min(540px, calc(100% - 26px)); max-height: 90vh; max-height: 90dvh; padding: 18px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--card-bg); color: var(--text); }
 .rep-dialog::backdrop { background: rgb(16 37 75 / 48%); }
 .rep-photo-dialog img { display: block; max-width: 100%; max-height: 66vh; margin: 0 auto 10px; object-fit: contain; }
 .rep-payment { display: grid; gap: 12px; }
 .rep-payment .rep-heading, .rep-payment .rep-error { margin: 0; }
-.rep-jump { display: none; }
+.rep-mobile-sale, .rep-back-products { display: none; }
+@media (max-width: 850px), (pointer: coarse) {
+  .rep :is(button, select, .rep-button, .rep-row-actions a, .rep-bar nav a) { min-height: 44px; }
+  .rep .rep-row-actions a, .rep .rep-bar nav a { display: inline-flex; align-items: center; }
+  .rep input:not([type='checkbox']), .rep select { font-size: 16px; min-height: 44px; }
+  .rep .rep-row-actions button { min-height: 44px; }
+}
 @media (max-width: 850px) {
   .rep-workspace { grid-template-columns: minmax(0, 1fr); }
   .rep-order { position: static; }
-  .rep-jump { display: inline; }
+  .rep-back-products { display: inline-block; }
+  .rep .rep-mobile-sale:not(.at-order) {
+    display: flex;
+    position: fixed;
+    z-index: 3;
+    inset-inline: 0;
+    bottom: 0;
+    justify-content: end;
+    padding: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid var(--border);
+    background: var(--card-bg);
+  }
+  .rep .rep-mobile-sale button { width: min(100%, 260px); }
+  .rep-table { overflow: visible; border: 0; border-radius: 0; }
+  .rep-table table, .rep-table tbody { display: block; min-width: 0; }
+  .rep-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .rep-table tbody tr { display: block; margin-bottom: 10px; padding: 5px 10px; border: 1px solid var(--border); border-radius: 7px; }
+  .rep-table tbody td { display: block; padding: 6px 0; border-bottom: 0; overflow-wrap: anywhere; }
+  .rep-table tbody td[data-label]::before { content: attr(data-label) ": "; color: var(--text-muted); }
 }
 @media (max-width: 600px) {
   .rep-bar { gap: 8px 12px; padding: 12px; }

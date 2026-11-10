@@ -32,7 +32,7 @@ class SalesRepTests(unittest.TestCase):
         frappe.session.user = "rep@example.test"
         modules = {
             "frappe": frappe,
-            "frappe.utils": SimpleNamespace(cint=int, flt=float, escape_html=str, nowdate=Mock()),
+            "frappe.utils": SimpleNamespace(cint=int, flt=lambda value: float(value or 0), escape_html=str, nowdate=Mock()),
             "esafe_salesrep.api.permissions": Mock(),
             "esafe_salesrep.api.catalog": Mock(),
             "esafe_salesrep.api.session": Mock(),
@@ -75,3 +75,58 @@ class SalesRepTests(unittest.TestCase):
         with self.assertRaisesRegex(ValidationError, "latitude"):
             self.rep.check_in("Field Sales", 91, 79, 5, "unused")
         self.rep._reserve.assert_not_called()
+
+    def test_native_order_discount_takes_precedence_over_negotiation(self):
+        doc = SimpleNamespace(
+            get=lambda field: False, discount_amount=0, additional_discount_percentage=0,
+            flags=SimpleNamespace(),
+        )
+
+        def calculate(method):
+            doc.total = 1000
+            doc.discount_amount = doc.additional_discount_percentage * 10
+
+        def native_rule(current):
+            # A quantity or amount rule needs the item totals first.
+            self.assertEqual(current.total, 1000)
+            current.discount_amount = 150
+
+        doc.run_method = calculate
+        path = "erpnext.accounts.doctype.pricing_rule.utils"
+        with patch.dict(sys.modules, {path: SimpleNamespace(apply_pricing_rule_on_transaction=native_rule)}):
+            self.rep._apply_pricing(doc, 5)
+        self.assertEqual(doc.discount_amount, 150)
+        self.assertEqual(doc.flags.sales_rep_automatic_discount, 150)
+        self.assertEqual(doc.additional_discount_percentage, 0)
+
+    def test_negotiation_applies_when_there_is_no_automatic_order_discount(self):
+        doc = SimpleNamespace(
+            get=lambda field: False, discount_amount=0, additional_discount_percentage=0,
+            flags=SimpleNamespace(),
+        )
+
+        def calculate(method):
+            doc.discount_amount = doc.additional_discount_percentage * 10
+
+        doc.run_method = calculate
+        path = "erpnext.accounts.doctype.pricing_rule.utils"
+        with patch.dict(sys.modules, {path: SimpleNamespace(apply_pricing_rule_on_transaction=lambda current: None)}):
+            self.rep._apply_pricing(doc, 5)
+        self.assertEqual(doc.discount_amount, 50)
+        self.assertEqual(doc.flags.sales_rep_automatic_discount, 0)
+
+    def test_changed_item_price_is_rejected_even_when_rounded_total_matches(self):
+        class Row(dict):
+            __getattr__ = dict.__getitem__
+
+        item = Row(item_code="ITEM", item_name="Item", qty=1, uom="Nos", rate=100.15,
+                   amount=100.15, discount_percentage=0)
+        doc = SimpleNamespace(name=None, currency="LKR", net_total=100.15, total_taxes_and_charges=0,
+                              rounded_total=100, discount_amount=0, flags={}, items=[item],
+                              is_rounded_total_disabled=lambda: False)
+        reviewed = self.rep._totals(doc)
+        item["rate"] = item["amount"] = doc.net_total = 100.25
+        with self.assertRaisesRegex(ValidationError, "recalculated"):
+            self.rep._verify_reviewed_pricing(doc, {
+                "reviewed_currency": "LKR", "reviewed_total": 100, "reviewed_pricing": reviewed["pricing_signature"],
+            })
