@@ -1,6 +1,6 @@
 {
-  "name": "Esafe Sales Rep",
-  "short_name": "Sales Rep",
+  "name": "Esafe-SalesRep",
+  "short_name": "Esafe-SalesRep",
   "description": "Field sales for ERPNext. Browse products, submit quotations and invoices, and record payments.",
   "id": "/pos",
   "start_url": "/pos",
@@ -14,13 +14,13 @@
   "categories": ["business", "productivity", "shopping"],
   "icons": [
     {
-      "src": "/assets/lumenpos/pos/icon-192.png",
+      "src": "/assets/esafe_salesrep/pos/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/assets/lumenpos/pos/icon-512.png",
+      "src": "/assets/esafe_salesrep/pos/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"

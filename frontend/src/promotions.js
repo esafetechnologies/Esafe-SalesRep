@@ -1,7 +1,7 @@
 // Copyright (c) 2026 Esafe (PVT) LTD
 // SPDX-License-Identifier: AGPL-3.0-only
-// "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md.
-// Mirror of lumenpos/promotions/engine.py. Keep both in sync.
+// "Esafe-SalesRep" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md.
+// Mirror of esafe_salesrep/promotions/engine.py. Keep both in sync.
 // Runs client-side so the cart updates instantly; the server re-evaluates
 // authoritatively on submit.
 
@@ -22,7 +22,7 @@ function isActive(promo, now, cart) {
     const start = normTime(promo.start_time)
     const end = normTime(promo.end_time)
     // A window under a minute is not a window. Frappe fills an empty Time field
-    // with the moment of the save, so a record saved anywhere but EsafePOS's
+    // with the moment of the save, so a record saved anywhere but Esafe-SalesRep's
     // own screen comes back with a start and an end milliseconds apart, which
     // would switch the promotion off for the rest of the day. The till picks
     // whole minutes, so no real window is lost. Equal times are the same case.
@@ -63,7 +63,7 @@ function pad(n) {
 // Zero padded HH:MM:SS, microseconds dropped. These are compared as strings
 // against the local clock, so a single digit hour ("9:00:00") would sort above
 // "09:30:00" and break a morning happy hour. Kept in step with _norm_time() in
-// lumenpos/promotions/engine.py.
+// esafe_salesrep/promotions/engine.py.
 function normTime(v) {
   const parts = String(v).split('.')[0].split(':')
   const nums = [0, 0, 0].map((_, i) => parseInt(parts[i], 10) || 0)
@@ -71,7 +71,7 @@ function normTime(v) {
 }
 
 // How long a daily window lasts, in seconds, wrapping midnight. Kept in step
-// with window_seconds() in lumenpos/promotions/engine.py.
+// with window_seconds() in esafe_salesrep/promotions/engine.py.
 function windowSeconds(start, end) {
   const secs = (v) => {
     const [h, m, s] = String(v)

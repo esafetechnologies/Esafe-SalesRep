@@ -1,6 +1,6 @@
 <!-- Copyright (c) 2026 Esafe (PVT) LTD
      SPDX-License-Identifier: AGPL-3.0-only
-     "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
+     "Esafe-SalesRep" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
 <template>
   <div class="modal-backdrop" @click.self="$emit('close')">
     <div class="modal">
@@ -46,7 +46,7 @@ onMounted(load)
 async function load() {
   loading.value = true
   try {
-    parked.value = await call('lumenpos.api.sales.list_parked', {
+    parked.value = await call('esafe_salesrep.api.sales.list_parked', {
       pos_profile: session.posProfile,
     })
   } finally {
@@ -66,7 +66,7 @@ async function retrieve(name) {
 
 async function discard(name) {
   if (!confirm(t('Discard this parked sale?'))) return
-  await call('lumenpos.api.sales.discard_parked', { name })
+  await call('esafe_salesrep.api.sales.discard_parked', { name })
   await load()
 }
 </script>

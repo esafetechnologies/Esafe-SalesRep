@@ -1,8 +1,8 @@
 <!-- Copyright (c) 2026 Esafe (PVT) LTD
      SPDX-License-Identifier: AGPL-3.0-only
-     "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
+     "Esafe-SalesRep" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
 <template>
-  <!-- A customer's account (lumenpos.api.credit, 0.60.0): what they owe sale by
+  <!-- A customer's account (esafe_salesrep.api.credit, 0.60.0): what they owe sale by
        sale, a payment of it into this till's drawer, and a manager's switch and
        limit on their card. Shown only while the shop sells on account. -->
   <section v-if="facts && facts.enabled" class="credit-card card" data-tour="customer-credit">
@@ -166,7 +166,7 @@ async function load() {
   facts.value = null
   if (!props.customer || !(session.settings?.credit_sales_enabled)) return
   try {
-    facts.value = await call('lumenpos.api.credit.customer_credit', {
+    facts.value = await call('esafe_salesrep.api.credit.customer_credit', {
       customer: props.customer,
       company: props.company || session.company,
     })
@@ -187,7 +187,7 @@ const changed = computed(
 async function saveCredit() {
   saving.value = true
   try {
-    facts.value = await call('lumenpos.api.credit.set_customer_credit', {
+    facts.value = await call('esafe_salesrep.api.credit.set_customer_credit', {
       customer: props.customer,
       company: props.company || session.company,
       allow: allow.value ? 1 : 0,
@@ -205,7 +205,7 @@ async function saveCredit() {
 }
 
 // Money the till may take a debt in: the outlet's own tenders in the company's
-// currency, never EsafePOS's internal ones.
+// currency, never Esafe-SalesRep's internal ones.
 const payModes = computed(() => {
   const internal = [session.storeCreditMode, session.cashbackMode, session.giftCardMode, session.creditMode, 'Exchange']
   return (session.paymentModes || []).filter(
@@ -252,7 +252,7 @@ async function take() {
     const items = (facts.value.items || [])
       .filter((i) => chosen.value.includes(i.name))
       .map((i) => ({ doctype: i.doctype, name: i.name }))
-    paid.value = await call('lumenpos.api.credit.receive_payment', {
+    paid.value = await call('esafe_salesrep.api.credit.receive_payment', {
       customer: props.customer,
       pos_profile: session.posProfile,
       amount: parsed.value,

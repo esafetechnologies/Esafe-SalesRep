@@ -1,6 +1,6 @@
 // Copyright (c) 2026 Esafe (PVT) LTD
 // SPDX-License-Identifier: AGPL-3.0-only
-// "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md.
+// "Esafe-SalesRep" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md.
 // Customer-facing display sync. The till (main window) publishes a fully
 // pre-formatted cart snapshot over a BroadcastChannel; the display window
 // (route #/display, opened on a second monitor) listens and renders it.
@@ -12,7 +12,7 @@
 
 import { newId } from './offline'
 
-const NAME = 'lumenpos-customer-display'
+const NAME = 'esafe-salesrep-customer-display'
 let channel = null
 // Each till tab owns its display; customer input must never reach another till.
 export const displayTerminalId = newId()

@@ -5,7 +5,7 @@ import { mkdir, readFile } from 'node:fs/promises'
 import { basename, extname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-const bundle = fileURLToPath(new URL('../lumenpos/public/pos/', import.meta.url))
+const bundle = fileURLToPath(new URL('../esafe_salesrep/public/pos/', import.meta.url))
 const items = [
   ['WP-03', 'Water pump 3 inch', 'Aqua', 'Pumps', 168000],
   ['WP-02', 'Water pump 2 inch', 'Aqua', 'Pumps', 125000],
@@ -76,7 +76,7 @@ function reply(method, args, res) {
 const server = createServer(async (req, res) => {
   const path = new URL(req.url, 'http://localhost').pathname
   try {
-    if (path.startsWith('/api/method/')) {
+    if (path.startsWith('/api/method/esafe_salesrep.api.sales_rep.')) {
       let body = ''
       for await (const chunk of req) body += chunk
       const result = reply(path.split('.').at(-1), JSON.parse(body), res)
@@ -89,6 +89,10 @@ const server = createServer(async (req, res) => {
     if (path === '/product.svg') {
       res.setHeader('Content-Type', 'image/svg+xml')
       res.end('<svg xmlns="http://www.w3.org/2000/svg" width="320" height="200" viewBox="0 0 320 200"><g stroke="#25334a" stroke-width="8" fill="none"><rect x="42" y="33" width="236" height="140" rx="19"/><path d="M88 173v10m143-10v10"/></g><path fill="#3568d4" d="M86 83h120v68H86z"/><circle cx="195" cy="119" r="42" fill="#10254b"/><circle cx="195" cy="119" r="27" fill="#fff"/><circle cx="195" cy="119" r="13" fill="#68778d"/><path fill="#13a795" d="M80 58h94v31H80z"/></svg>')
+      return
+    }
+    if (path !== '/' && path !== '/pos' && !path.startsWith('/assets/esafe_salesrep/pos/')) {
+      res.writeHead(404).end()
       return
     }
     const file = path === '/' || path === '/pos' ? 'index.html' : basename(path)
@@ -119,7 +123,7 @@ try {
   const errors = []
   page.on('pageerror', e => errors.push(e.message))
   let responseLost = false
-  await page.route('**/lumenpos.api.sales_rep.record_payment', async route => {
+  await page.route('**/esafe_salesrep.api.sales_rep.record_payment', async route => {
     const response = await route.fetch()
     if (responseLost) await route.fulfill({ response })
     else {
@@ -129,6 +133,8 @@ try {
     }
   })
   await page.goto(url)
+  assert.equal(await page.title(), 'Esafe-SalesRep')
+  await page.getByRole('link', { name: 'Esafe-SalesRep', exact: true }).waitFor()
   await page.getByText('Water pump 3 inch', { exact: true }).waitFor()
   await page.getByLabel('Brand', { exact: true }).selectOption('FieldPro')
   await page.getByText('Rotary tiller 6 ft', { exact: true }).waitFor()

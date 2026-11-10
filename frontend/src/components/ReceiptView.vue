@@ -1,6 +1,6 @@
 <!-- Copyright (c) 2026 Esafe (PVT) LTD
      SPDX-License-Identifier: AGPL-3.0-only
-     "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
+     "Esafe-SalesRep" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
 <template>
   <div
     :id="printable ? 'receipt-print' : null"
@@ -301,7 +301,7 @@ const s = computed(
   () => props.settings || { ...(session.settings || {}), ...(props.receipt.receipt_settings || {}) }
 )
 
-// Amounts print in the sale's own currency (lumenpos.currency). A sale in
+// Amounts print in the sale's own currency (esafe_salesrep.currency). A sale in
 // another currency also shows its local value, the rate, each tender in its own
 // money and the change in local money (it always comes out of the main drawer).
 const m = (amount) => money(amount, props.receipt.currency)
@@ -379,7 +379,7 @@ function asImg(value) {
   return /^(data:|https?:|\/)/i.test(v) ? v : `data:image/png;base64,${v}`
 }
 
-// EsafePOS's own tender for a sale on account reads in the till's language.
+// Esafe-SalesRep's own tender for a sale on account reads in the till's language.
 function modeLabel(mode) {
   return mode && mode === session.creditMode ? t('On account') : mode
 }

@@ -1,6 +1,6 @@
 <!-- Copyright (c) 2026 Esafe (PVT) LTD
      SPDX-License-Identifier: AGPL-3.0-only
-     "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
+     "Esafe-SalesRep" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
 <template>
   <div class="lock-overlay">
     <div class="lock-card">
@@ -95,7 +95,7 @@ async function unlock() {
   checking.value = true
   error.value = ''
   try {
-    const res = await call('lumenpos.api.session.unlock_till', { passcode: pin.value })
+    const res = await call('esafe_salesrep.api.session.unlock_till', { passcode: pin.value })
     if (res.ok) {
       pin.value = ''
       session.locked = false
@@ -123,7 +123,7 @@ async function createPin() {
   checking.value = true
   error.value = ''
   try {
-    await call('lumenpos.api.pin.set_pin', { pin: pin.value })
+    await call('esafe_salesrep.api.pin.set_pin', { pin: pin.value })
     session.pinSet = true
     pin.value = ''
     pin2.value = ''
@@ -145,7 +145,7 @@ async function sendCode() {
   checking.value = true
   error.value = ''
   try {
-    const res = await call('lumenpos.api.pin.request_pin_reset')
+    const res = await call('esafe_salesrep.api.pin.request_pin_reset')
     sentTo.value = res.email
   } catch (e) {
     error.value = e.message
@@ -158,7 +158,7 @@ async function applyReset() {
   checking.value = true
   error.value = ''
   try {
-    await call('lumenpos.api.pin.reset_pin_with_code', { code: code.value, new_pin: pin.value })
+    await call('esafe_salesrep.api.pin.reset_pin_with_code', { code: code.value, new_pin: pin.value })
     session.pinSet = true
     session.locked = false
     pin.value = ''

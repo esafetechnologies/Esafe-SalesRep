@@ -1,6 +1,6 @@
 <!-- Copyright (c) 2026 Esafe (PVT) LTD
      SPDX-License-Identifier: AGPL-3.0-only
-     "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
+     "Esafe-SalesRep" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
 <template>
   <div class="period-hint" role="note">
     <Icon name="warning" :size="16" />
@@ -28,7 +28,7 @@
 
 <script setup>
 // An ERPNext Accounting Period that locks Sales Invoices
-// (lumenpos.accounting_periods, 0.58.1): why a close failed ("failed"), or,
+// (esafe_salesrep.accounting_periods, 0.58.1): why a close failed ("failed"), or,
 // as a shift opens, why its close would fail ("today"). A shop that made a
 // period ahead of time "to open" a month sells all day and then cannot close
 // the shift, because the close posts the shift's sales as a Sales Invoice.

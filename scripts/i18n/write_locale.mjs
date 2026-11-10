@@ -1,6 +1,6 @@
 // Copyright (c) 2026 Esafe (PVT) LTD
 // SPDX-License-Identifier: AGPL-3.0-only
-// "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md.
+// "Esafe-SalesRep" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md.
 // Build frontend/src/locales/<code>.js from <work>/<code>_ui_part*.json, after
 // checking every text keeps its {placeholders} and marks and carries no dash
 // or semicolon. Usage: node write_locale.mjs <work> <code> "<English name>" [--dry]
@@ -47,7 +47,7 @@ const body = Object.entries(dict)
   .join('\n')
 const file = `// Copyright (c) 2026 Esafe (PVT) LTD
 // SPDX-License-Identifier: AGPL-3.0-only
-// "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md.
+// "Esafe-SalesRep" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md.
 // ${englishName} for the till, keyed by the English source string like the
 // Arabic in messages.js. Loaded only when a cashier picks ${englishName}
 // (i18n.js). A missing key falls back to English. Built by

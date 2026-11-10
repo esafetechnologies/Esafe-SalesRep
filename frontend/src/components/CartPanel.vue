@@ -1,6 +1,6 @@
 <!-- Copyright (c) 2026 Esafe (PVT) LTD
      SPDX-License-Identifier: AGPL-3.0-only
-     "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
+     "Esafe-SalesRep" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
 <template>
   <aside class="cart card">
     <div class="customer-row" data-tour="cart-customer" role="button" tabindex="0" @click="customerOpen = true" @keydown.enter="customerOpen = true">
@@ -356,7 +356,7 @@ async function toggleTool(name) {
 }
 
 // The breakdown under the total: folded unless this device opened it.
-const DETAILS_KEY = 'lumenpos-cart-details'
+const DETAILS_KEY = 'esafe-salesrep-cart-details'
 function detailsRemembered() {
   try {
     return localStorage.getItem(DETAILS_KEY) === '1'

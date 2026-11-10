@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # Copyright (c) 2026 Esafe (PVT) LTD
 # SPDX-License-Identifier: AGPL-3.0-only
-# "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md.
+# "Esafe-SalesRep" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md.
 """Unit test for the shift-schedule matcher, runs WITHOUT a bench or a site.
 
 It stubs `frappe` and executes only the two pure helpers out of register.py, so
@@ -23,7 +23,7 @@ import sys
 import types
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-SRC = ROOT / "lumenpos" / "api" / "register.py"
+SRC = ROOT / "esafe_salesrep" / "api" / "register.py"
 
 WANTED = {"_as_time", "_scheduled_end"}
 SLOTS = []

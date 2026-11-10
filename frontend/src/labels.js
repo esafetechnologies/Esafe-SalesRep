@@ -1,6 +1,6 @@
 // Copyright (c) 2026 Esafe (PVT) LTD
 // SPDX-License-Identifier: AGPL-3.0-only
-// "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md.
+// "Esafe-SalesRep" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md.
 //
 // Printed labels (0.67.0): the sizes a shop picks from and the page the browser
 // prints, sized in millimetres so a label printer or an A4 sheet gets exactly
@@ -32,7 +32,7 @@ export function sizeOf(key, custom = {}) {
   return { ...preset, w: clamp(custom.w, 20, 120, 50), h: clamp(custom.h, 15, 120, 30), cols: 0, rows: 0 }
 }
 
-// One label's HTML. `row` comes from lumenpos.api.labels (item_name, barcode,
+// One label's HTML. `row` comes from esafe_salesrep.api.labels (item_name, barcode,
 // item_code, price text...), `show` says which fields print.
 export function labelHtml(row, show, size) {
   const code = row.barcode || row.item_code

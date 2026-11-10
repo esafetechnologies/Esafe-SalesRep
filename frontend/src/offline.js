@@ -1,18 +1,18 @@
 // Copyright (c) 2026 Esafe (PVT) LTD
 // SPDX-License-Identifier: AGPL-3.0-only
-// "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md.
+// "Esafe-SalesRep" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md.
 // Offline layer: IndexedDB cache for bootstrap + catalog, and a queue for
 // sales made while the network is down. No external dependencies.
 
-const DB_NAME = 'lumenpos'
+const DB_NAME = 'esafe_salesrep'
 const DB_VERSION = 5
 
 // The till page and the service worker's background upload (public/sw.js)
 // take turns through this Web Lock, so one queued sale is never sent by both
 // at once. sw.js uses the same name.
-export const UPLOAD_LOCK = 'lumenpos-queue-upload'
+export const UPLOAD_LOCK = 'esafe-salesrep-queue-upload'
 // The Background Sync tag the page asks for and sw.js answers.
-export const SYNC_TAG = 'lumenpos-queue'
+export const SYNC_TAG = 'esafe-salesrep-queue'
 
 // A unique client id for offline records (queued-sale idempotency keys,
 // offline-created customer temp ids).

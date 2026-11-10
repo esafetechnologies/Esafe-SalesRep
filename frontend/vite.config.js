@@ -1,16 +1,16 @@
 // Copyright (c) 2026 Esafe (PVT) LTD
 // SPDX-License-Identifier: AGPL-3.0-only
-// "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md.
+// "Esafe-SalesRep" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md.
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
 // Build straight into the Frappe app's public folder with fixed filenames so
-// lumenpos/www/pos.html can reference /assets/lumenpos/pos/pos.js and pos.css.
+// esafe_salesrep/www/pos.html can reference /assets/esafe_salesrep/pos/pos.js and pos.css.
 export default defineConfig({
   plugins: [vue()],
-  base: '/assets/lumenpos/pos/',
+  base: '/assets/esafe_salesrep/pos/',
   build: {
-    outDir: '../lumenpos/public/pos',
+    outDir: '../esafe_salesrep/public/pos',
     emptyOutDir: true,
     rollupOptions: {
       output: {

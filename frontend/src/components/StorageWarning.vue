@@ -1,6 +1,6 @@
 <!-- Copyright (c) 2026 Esafe (PVT) LTD
      SPDX-License-Identifier: AGPL-3.0-only
-     "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
+     "Esafe-SalesRep" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
 <template>
   <div v-if="show" class="storage-warn" role="status">
     <Icon name="shield" :size="18" />
@@ -25,14 +25,14 @@
 // sales in it. The till asks at start (App.vue), and this says so when the
 // browser did not agree, and asks again on a tap: Firefox shows its own
 // question then, Chrome and Edge agree once the till is installed as an app
-// or bookmarked. EsafePOS Settings.warn_unprotected_storage switches it off.
+// or bookmarked. Esafe-SalesRep Settings.warn_unprotected_storage switches it off.
 import { onMounted, ref, watch } from 'vue'
 import Icon from './Icon.vue'
 import { t } from '../i18n'
 import { ensurePersistentStorage, storagePersisted } from '../offline'
 import { useSessionStore } from '../stores/session'
 
-const SNOOZE_KEY = 'lumenpos-storage-snooze'
+const SNOOZE_KEY = 'esafe-salesrep-storage-snooze'
 const SNOOZE_MS = 24 * 3600 * 1000
 
 const session = useSessionStore()

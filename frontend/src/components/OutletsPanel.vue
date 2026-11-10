@@ -1,10 +1,10 @@
 <!-- Copyright (c) 2026 Esafe (PVT) LTD
      SPDX-License-Identifier: AGPL-3.0-only
-     "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
+     "Esafe-SalesRep" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
 <!-- The Outlets tab of Insights (0.62.0): each outlet's sales, returns,
      average sale and items sold, its shifts and their over and short, the
      stock in its warehouse with the items at or below their reorder level, and
-     its best sellers (lumenpos.api.reports.outlets). Opens on every outlet of
+     its best sellers (esafe_salesrep.api.reports.outlets). Opens on every outlet of
      the company. -->
 <template>
   <div class="rep">
@@ -104,7 +104,7 @@ async function load(args) {
   loading.value = true
   error.value = ''
   try {
-    report.value = await call('lumenpos.api.reports.outlets', asked)
+    report.value = await call('esafe_salesrep.api.reports.outlets', asked)
   } catch (e) {
     report.value = null
     error.value = e.message || String(e)

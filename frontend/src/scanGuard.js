@@ -1,6 +1,6 @@
 // Copyright (c) 2026 Esafe (PVT) LTD
 // SPDX-License-Identifier: AGPL-3.0-only
-// "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md.
+// "Esafe-SalesRep" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md.
 // Distinguish a barcode-scanner burst from manual typing, so serial entry can
 // be locked to "scan only" (Settings → Require scanning for serial numbers).
 //

@@ -1,6 +1,6 @@
 <!-- Copyright (c) 2026 Esafe (PVT) LTD
      SPDX-License-Identifier: AGPL-3.0-only
-     "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
+     "Esafe-SalesRep" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
 <template>
   <div class="settings">
     <!-- Segmented pill tab bar -->
@@ -1069,7 +1069,7 @@
           </label>
         </div>
       </div>
-      <!-- Sales on account (lumenpos.credit_sales, 0.60.0) -->
+      <!-- Sales on account (esafe_salesrep.credit_sales, 0.60.0) -->
       <div class="sec-card" v-show="generalSection === 'credit'" data-tour="settings-credit">
         <div class="sec-title"><Icon name="clock" /> {{ t('Sales on account') }}</div>
         <p class="sec-note">{{ t('A customer takes the goods now and pays later, all of it, or the rest after paying part.') }}</p>
@@ -1111,7 +1111,7 @@
             <p class="muted small" style="margin: 0">{{ t("Who may sell on account, take customer payments and set a customer's credit is set in Approvals and access, Permissions. Until someone is named there, only managers can.") }}</p>
           </div>
           <div class="credit-setup">
-            <div class="sub-label">{{ t('Set up by EsafePOS') }}</div>
+            <div class="sub-label">{{ t('Set up by Esafe-SalesRep') }}</div>
             <div v-for="row in settingsInfo.credit_setup || []" :key="row.company" class="credit-setup-row">
               <bdi class="credit-company">{{ row.company }}</bdi>
               <span v-if="row.ready" class="muted small">{{ t('Payment method {mode}, account {account}', { mode: row.mode, account: row.account }) }}</span>
@@ -1179,7 +1179,7 @@
         </button>
       </div>
 
-      <!-- Companies of the group (lumenpos.inter_company) -->
+      <!-- Companies of the group (esafe_salesrep.inter_company) -->
       <div class="sec-card" v-show="generalSection === 'companies'">
         <div class="sec-title"><Icon name="company" /> {{ t('Customer balances across companies') }}</div>
         <p class="sec-note">{{ t('Gift cards, cashback and store credit, on a site with more than one company. Shared: a customer spends their balance at any company of the group that keeps its books in the same currency, and each company\'s books are kept right by an Inter Company Journal Entry. Separate: a balance is spent only at the company that issued it.') }}</p>
@@ -1250,7 +1250,7 @@
         </template>
       </div>
 
-      <!-- The new-customer form (lumenpos.customer_form) -->
+      <!-- The new-customer form (esafe_salesrep.customer_form) -->
       <div class="sec-card" v-show="generalSection === 'customers'">
         <div class="sec-title"><Icon name="person" /> {{ t('New customer form') }}</div>
         <p class="sec-note">{{ t('What the till asks when a cashier adds a customer. Each field can be hidden, optional or required, for individuals and for companies apart. The address is the Saudi national address. A shop elsewhere can keep only the parts it needs.') }}</p>
@@ -1300,7 +1300,7 @@
         </p>
       </div>
 
-      <!-- Other currencies (lumenpos.currency) -->
+      <!-- Other currencies (esafe_salesrep.currency) -->
       <div class="sec-card" v-show="generalSection === 'currencies'">
         <div class="sec-title"><Icon name="cash" /> {{ t('Other currencies') }}</div>
         <p class="sec-note">{{ t('Sell to customers who pay in another currency. A customer whose Billing Currency in ERPNext is another currency buys in it, and a walk-in can be switched to it at the till. Prices, offers and discounts stay in the outlet currency and are converted at the rate of the shift.') }}</p>
@@ -1419,10 +1419,10 @@
             <input type="checkbox" class="setting-toggle" v-model="generalForm.carry_shift_past_midnight" :true-value="1" :false-value="0" />
             <span class="setting-text">
               <span class="setting-title">{{ t('Keep a shift open past midnight') }}</span>
-              <span class="setting-desc">{{ t('ERPNext 16 takes sales only on a shift opened the same day. On (the default): at the first sale after midnight EsafePOS closes the day in ERPNext and opens the next one by itself, and the shift carries on and is counted once, at its own close. Off: a shift from an earlier day has to be closed before it can sell again.') }}</span>
+              <span class="setting-desc">{{ t('ERPNext 16 takes sales only on a shift opened the same day. On (the default): at the first sale after midnight Esafe-SalesRep closes the day in ERPNext and opens the next one by itself, and the shift carries on and is counted once, at its own close. Off: a shift from an earlier day has to be closed before it can sell again.') }}</span>
             </span>
           </label>
-          <!-- lumenpos.accounting_periods (0.58.1) -->
+          <!-- esafe_salesrep.accounting_periods (0.58.1) -->
           <label class="setting-row">
             <input type="checkbox" class="setting-toggle" v-model="generalForm.warn_locked_periods" :true-value="1" :false-value="0" />
             <span class="setting-text">
@@ -1447,7 +1447,7 @@
           <div v-if="generalForm.overdue_alert_enabled" class="field-grid" style="margin: 6px 0 12px">
             <label class="field">
               <span>{{ t('Notify role') }}</span>
-              <LinkPicker doctype="Role" v-model="generalForm.overdue_alert_role" :placeholder="t('e.g. EsafePOS Manager')" />
+              <LinkPicker doctype="Role" v-model="generalForm.overdue_alert_role" :placeholder="t('e.g. Esafe-SalesRep Manager')" />
             </label>
             <label class="field">
               <span>{{ t('Grace period (minutes)') }}</span>
@@ -1465,10 +1465,10 @@
             </label>
             <label class="field">
               <span>{{ t('Notify role') }}</span>
-              <LinkPicker doctype="Role" v-model="generalForm.variance_alert_role" :placeholder="t('e.g. EsafePOS Manager')" />
+              <LinkPicker doctype="Role" v-model="generalForm.variance_alert_role" :placeholder="t('e.g. Esafe-SalesRep Manager')" />
             </label>
           </div>
-          <!-- A reason for a short or over at the close (lumenpos.variance, 0.59.0). -->
+          <!-- A reason for a short or over at the close (esafe_salesrep.variance, 0.59.0). -->
           <label class="field span-2" style="display:block; margin: 6px 0 10px">
             <span class="setting-title">{{ t('Reason for a short or over') }}</span>
             <select v-model="generalForm.variance_reason_mode" class="cf-in" style="width: 100%; margin-top: 4px">
@@ -1582,7 +1582,7 @@
             <input type="checkbox" class="setting-toggle" v-model="generalForm.enable_insights" :true-value="1" :false-value="0" />
             <span class="setting-text">
               <span class="setting-title">{{ t('Insights page') }}</span>
-              <span class="setting-desc">{{ t('A statistics page for managers. With EsafePOS Reports installed it shows a full sales dashboard with filters.') }}</span>
+              <span class="setting-desc">{{ t('A statistics page for managers. With Esafe-SalesRep Reports installed it shows a full sales dashboard with filters.') }}</span>
             </span>
           </label>
           <label class="setting-row">
@@ -1596,7 +1596,7 @@
             <input type="checkbox" class="setting-toggle" v-model="generalForm.reports_without_till" :true-value="1" :false-value="0" />
             <span class="setting-text">
               <span class="setting-title">{{ t('Reports for management without a till') }}</span>
-              <span class="setting-desc">{{ t('Give a user the EsafePOS Reports role in ERPNext and EsafePOS opens on these reports alone, for every outlet of their companies, with no POS Profile, shift or sales. Add the EsafePOS Cashier role as well to let them sell too.') }}</span>
+              <span class="setting-desc">{{ t('Give a user the Esafe-SalesRep Reports role in ERPNext and Esafe-SalesRep opens on these reports alone, for every outlet of their companies, with no POS Profile, shift or sales. Add the Esafe-SalesRep Cashier role as well to let them sell too.') }}</span>
             </span>
           </label>
           <label class="setting-row">
@@ -1690,15 +1690,15 @@
         </template>
       </div>
 
-      <!-- The EsafePOS Stock phone app (0.68.0, lumenpos.api.stock_app) -->
+      <!-- The Esafe-SalesRep Stock phone app (0.68.0, esafe_salesrep.api.stock_app) -->
       <div class="sec-card" v-show="generalSection === 'features'" data-tour="settings-stock-app">
-        <div class="sec-title"><Icon name="barcode" /> {{ t('EsafePOS Stock app') }}</div>
-        <p class="sec-note">{{ t('The EsafePOS Stock phone app counts stock, alone or with several phones at once, and makes stock entries and purchase receipts. It saves them as the person on the phone, so their ERPNext permissions apply. Who may use it is set under Permissions, Use the stock app.') }}</p>
+        <div class="sec-title"><Icon name="barcode" /> {{ t('Esafe-SalesRep Stock app') }}</div>
+        <p class="sec-note">{{ t('The Esafe-SalesRep Stock phone app counts stock, alone or with several phones at once, and makes stock entries and purchase receipts. It saves them as the person on the phone, so their ERPNext permissions apply. Who may use it is set under Permissions, Use the stock app.') }}</p>
         <div class="setting-list">
           <label class="setting-row">
             <input type="checkbox" class="setting-toggle" v-model="generalForm.enable_stock_app" :true-value="1" :false-value="0" />
             <span class="setting-text">
-              <span class="setting-title">{{ t('EsafePOS Stock app') }}</span>
+              <span class="setting-title">{{ t('Esafe-SalesRep Stock app') }}</span>
               <span class="setting-desc">{{ t('Off: the app is refused on this site.') }}</span>
             </span>
           </label>
@@ -2264,16 +2264,16 @@
           <div class="field-grid">
             <label class="field">
               <span>{{ t('Role that can approve requests (discount, return and cash out)') }}</span>
-              <LinkPicker doctype="Role" v-model="generalForm.approver_role" :placeholder="t('e.g. EsafePOS Manager')" />
+              <LinkPicker doctype="Role" v-model="generalForm.approver_role" :placeholder="t('e.g. Esafe-SalesRep Manager')" />
             </label>
           </div>
           <p class="muted hint-row">
-            {{ t('Holders of this role (plus EsafePOS / System Managers) get an Approvals tray in the POS and can approve requests while the cashier\'s register is still open.') }}
+            {{ t('Holders of this role (plus Esafe-SalesRep / System Managers) get an Approvals tray in the POS and can approve requests while the cashier\'s register is still open.') }}
           </p>
         </template>
       </div>
 
-      <!-- Cash out (lumenpos.cash_out, 0.61.0) -->
+      <!-- Cash out (esafe_salesrep.cash_out, 0.61.0) -->
       <div class="sec-card" v-show="generalSection === 'approvals'" data-tour="settings-cash-out">
         <div class="sec-title"><Icon name="cash" /> {{ t('Cash out') }}</div>
         <p class="sec-note">{{ t('Money taken out of the drawer during a shift.') }}</p>
@@ -2305,7 +2305,7 @@
         <p class="muted hint-row">{{ t('Who may put money in and who may take it out are two permissions, below.') }}</p>
       </div>
 
-      <!-- Refund approval (lumenpos.refund_approval, 0.63.0) -->
+      <!-- Refund approval (esafe_salesrep.refund_approval, 0.63.0) -->
       <div class="sec-card" v-show="generalSection === 'approvals'" data-tour="settings-refund-approval">
         <div class="sec-title"><Icon name="shield" /> {{ t('Refund approval') }}</div>
         <p class="sec-note">{{ t('A supervisor approves money handed back on a refund.') }}</p>
@@ -2333,7 +2333,7 @@
         <div class="sec-title"><Icon name="shield" /> {{ t('Permissions') }}</div>
         <p class="sec-note">{{ t('Which roles may change a price, take a return, and approve one.') }}</p>
         <p class="muted hint-row" style="padding: 0 0 6px">
-          {{ t('Say who may do each action at the till. A rule names a role or one person, and any matching rule lets them through. System / EsafePOS Managers always pass.') }}
+          {{ t('Say who may do each action at the till. A rule names a role or one person, and any matching rule lets them through. System / Esafe-SalesRep Managers always pass.') }}
         </p>
         <!-- One row per rule: a role, or a single person by name. Several rows
              for the same action mean any of them passes. -->
@@ -2367,7 +2367,7 @@
           {{ saving ? t('Saving…') : t('Save Settings') }}
         </button>
       </div>
-      <p v-if="!canManage" class="muted hint-row">{{ t('You need write access to EsafePOS Settings to change these. Ask an administrator to grant the EsafePOS Manager role.') }}</p>
+      <p v-if="!canManage" class="muted hint-row">{{ t('You need write access to Esafe-SalesRep Settings to change these. Ask an administrator to grant the Esafe-SalesRep Manager role.') }}</p>
     </section>
 
     <!-- ============ AUDIT LOG ============ -->
@@ -2423,10 +2423,10 @@
     <section v-if="activeTab === 'System check'" class="tab-body">
       <div class="sec-card">
         <div class="sec-title"><Icon name="shield" /> {{ t('System check') }}</div>
-        <p class="sec-note">{{ t('What may stop EsafePOS working on this site, and what to do about it. Send a screenshot of this page, or Copy for support, with any problem you report.') }}</p>
+        <p class="sec-note">{{ t('What may stop Esafe-SalesRep working on this site, and what to do about it. Send a screenshot of this page, or Copy for support, with any problem you report.') }}</p>
         <div class="sc-bar">
           <span v-if="check" class="sc-versions">
-            <bdi>EsafePOS {{ check.versions.lumenpos }}</bdi> · <bdi>ERPNext {{ check.versions.erpnext }}</bdi> · <bdi>Frappe {{ check.versions.frappe }}</bdi>
+            <bdi>Esafe-SalesRep {{ check.versions.esafe_salesrep }}</bdi> · <bdi>ERPNext {{ check.versions.erpnext }}</bdi> · <bdi>Frappe {{ check.versions.frappe }}</bdi>
           </span>
           <span style="flex: 1" />
           <button class="btn btn-outline" :disabled="checking || session.offline" @click="runCheck">
@@ -2469,7 +2469,7 @@
 
     <section v-if="activeTab === 'Status'" class="tab-body">
       <div class="status-grid">
-        <div class="stat sec-card"><div class="stat-label">{{ t('EsafePOS version') }}</div><div class="stat-value">{{ settingsInfo.version || '-' }}</div></div>
+        <div class="stat sec-card"><div class="stat-label">{{ t('Esafe-SalesRep version') }}</div><div class="stat-value">{{ settingsInfo.version || '-' }}</div></div>
         <div class="stat sec-card"><div class="stat-label">{{ t('Outlet (POS Profile)') }}</div><div class="stat-value">{{ session.posProfile }}</div></div>
         <div class="stat sec-card"><div class="stat-label">{{ t('Default price list') }}</div><div class="stat-value">{{ session.priceList }}</div></div>
         <div class="stat sec-card"><div class="stat-label">{{ t('Connection') }}</div><div class="stat-value">{{ session.offline ? t('⚠ Offline') : t('✓ Online') }}</div></div>
@@ -2580,12 +2580,12 @@ const missingIndexes = computed(
   () => indexHealth.value.filter((i) => i.state === 'missing').length
 )
 async function loadIndexHealth() {
-  indexHealth.value = await call('lumenpos.api.settings.get_index_health').catch(() => [])
+  indexHealth.value = await call('esafe_salesrep.api.settings.get_index_health').catch(() => [])
 }
 async function rebuildIndexes() {
   rebuilding.value = true
   try {
-    await call('lumenpos.api.settings.rebuild_indexes')
+    await call('esafe_salesrep.api.settings.rebuild_indexes')
     session.notify(t('Rebuilding indexes in the background. Check back shortly.'))
   } catch (e) {
     session.notify(e.message, true)
@@ -2656,10 +2656,10 @@ const capabilityOptions = [
   'Use the stock app',
 ]
 
-// The parts of the EsafePOS Stock app a shop can switch off (0.68.0).
+// The parts of the Esafe-SalesRep Stock app a shop can switch off (0.68.0).
 const stockAppRows = computed(() => [
   { field: 'stock_allow_count', title: t('Stock counts'), desc: t('Count a warehouse and save the count as a Stock Reconciliation draft.') },
-  { field: 'stock_count_in_till', title: t('Count from EsafePOS'), desc: t('A Stock count screen in the till: count with a barcode scanner, alone or together with the phones of a shared count.') },
+  { field: 'stock_count_in_till', title: t('Count from Esafe-SalesRep'), desc: t('A Stock count screen in the till: count with a barcode scanner, alone or together with the phones of a shared count.') },
   { field: 'stock_allow_stock_entry', title: t('Stock entries'), desc: t('Receive, issue and transfer goods with a Stock Entry.') },
   { field: 'stock_allow_purchase_receipt', title: t('Purchase receipts'), desc: t('Receive a supplier delivery with a Purchase Receipt.') },
   { field: 'stock_allow_submit', title: t('Approve from the app'), desc: t('Off: what the app saves stays a draft for the desk to submit.') },
@@ -2825,7 +2825,7 @@ const generalSections = [
 ]
 const generalSection = ref('features')
 
-// ---- languages at the till (lumenpos.languages) ----
+// ---- languages at the till (esafe_salesrep.languages) ----
 // till_languages [] means every language, so one a later update adds shows up
 // by itself; ticking everything goes back to [].
 const languageOn = (code) =>
@@ -2842,13 +2842,13 @@ function toggleLanguage(code, on) {
   generalForm.value.till_languages = LANGUAGES.every((l) => list.includes(l.code)) ? [] : list
 }
 
-// ---- customer balances across companies (lumenpos.inter_company) ----
+// ---- customer balances across companies (esafe_salesrep.inter_company) ----
 const BALANCE_MODES = ['Shared by the group', 'Separate per company']
 const icStatus = ref(null)
 const icBusy = ref(false)
 async function loadInterCompany() {
   try {
-    icStatus.value = await call('lumenpos.inter_company.status')
+    icStatus.value = await call('esafe_salesrep.inter_company.status')
   } catch {
     icStatus.value = { pending: [], recent: [], companies: {} }
   }
@@ -2856,7 +2856,7 @@ async function loadInterCompany() {
 async function bookInterCompany() {
   icBusy.value = true
   try {
-    const res = await call('lumenpos.inter_company.post_now')
+    const res = await call('esafe_salesrep.inter_company.post_now')
     icStatus.value = res
     session.notify(t('{n} lines booked', { n: res.booked }))
   } catch (e) {
@@ -2877,7 +2877,7 @@ const customerFieldChoicesLeft = computed(() => {
 async function loadCustomerFieldChoices() {
   if (customerFieldChoices.value.length || session.offline) return
   try {
-    customerFieldChoices.value = await call('lumenpos.customer_form.field_choices')
+    customerFieldChoices.value = await call('esafe_salesrep.customer_form.field_choices')
   } catch (e) {
     session.notify(e.message, true)
   }
@@ -2935,8 +2935,8 @@ const ratesBusy = ref(false)
 async function updateRatesNow() {
   ratesBusy.value = true
   try {
-    await call('lumenpos.currency.update_rates_now')
-    const info = await call('lumenpos.api.settings.get_settings')
+    await call('esafe_salesrep.currency.update_rates_now')
+    const info = await call('esafe_salesrep.api.settings.get_settings')
     settingsInfo.value = info
     generalForm.value.sale_currencies = currencyRows(info)
     loadRateRows(info)
@@ -2957,7 +2957,7 @@ async function saveRate(row) {
   }
   row.busy = true
   try {
-    await call('lumenpos.currency.set_rate', {
+    await call('esafe_salesrep.currency.set_rate', {
       currency: row.currency,
       company_currency: row.company_currency,
       rate,
@@ -2980,7 +2980,7 @@ const restrictionForm = ref(null)
 const restrictionBusy = ref(false)
 
 async function loadReturnRestrictions() {
-  returnRestrictions.value = await call('lumenpos.api.settings.list_return_restrictions').catch(() => [])
+  returnRestrictions.value = await call('esafe_salesrep.api.settings.list_return_restrictions').catch(() => [])
 }
 
 function restrictionSummary(rule) {
@@ -3023,7 +3023,7 @@ async function saveReturnRestriction() {
   }
   restrictionBusy.value = true
   try {
-    await call('lumenpos.api.settings.save_return_restriction', {
+    await call('esafe_salesrep.api.settings.save_return_restriction', {
       payload: JSON.stringify({
         name: form.name,
         title: form.title.trim(),
@@ -3051,7 +3051,7 @@ async function saveReturnRestriction() {
 async function deleteReturnRestriction(rule) {
   if (!confirm(t('Delete the restriction "{title}"?', { title: rule.title }))) return
   try {
-    await call('lumenpos.api.settings.delete_return_restriction', { name: rule.name })
+    await call('esafe_salesrep.api.settings.delete_return_restriction', { name: rule.name })
     if (restrictionForm.value && restrictionForm.value.name === rule.name) restrictionForm.value = null
     await loadReturnRestrictions()
   } catch (e) {
@@ -3135,7 +3135,7 @@ const receiptForm = computed(() =>
 async function onReceiptScopeChange() {
   if (!receiptScope.value) return // back to the global default form
   try {
-    const res = await call('lumenpos.api.settings.get_profile_receipt', {
+    const res = await call('esafe_salesrep.api.settings.get_profile_receipt', {
       pos_profile: receiptScope.value,
     })
     profileReceiptForm.value = res.config || {}
@@ -3153,7 +3153,7 @@ async function saveProfileReceipt() {
   const config = {}
   for (const k of RECEIPT_KEYS) config[k] = profileReceiptForm.value[k]
   try {
-    await call('lumenpos.api.settings.save_profile_receipt', {
+    await call('esafe_salesrep.api.settings.save_profile_receipt', {
       pos_profile: profile,
       config: JSON.stringify(config),
       custom_fields: JSON.stringify(profileReceiptCustomFields.value),
@@ -3172,7 +3172,7 @@ async function resetProfileReceipt() {
   const profile = receiptScope.value
   if (!profile) return
   try {
-    await call('lumenpos.api.settings.clear_profile_receipt', { pos_profile: profile })
+    await call('esafe_salesrep.api.settings.clear_profile_receipt', { pos_profile: profile })
     profileReceiptOverrides.value = profileReceiptOverrides.value.filter((p) => p !== profile)
     await onReceiptScopeChange() // reload, now seeds from the global default
     session.notify(t('{outlet} now uses the default receipt', { outlet: profile }))
@@ -3195,7 +3195,7 @@ const customFields = computed(() =>
 async function loadFieldOptions(source) {
   if (!source || fieldOptions.value[source]) return
   try {
-    const opts = await call('lumenpos.api.settings.receipt_field_options', { source })
+    const opts = await call('esafe_salesrep.api.settings.receipt_field_options', { source })
     fieldOptions.value = { ...fieldOptions.value, [source]: opts }
   } catch {
     /* ignore, the picker just stays empty */
@@ -3258,7 +3258,7 @@ const AUDIT_PAGE = 50
 async function loadAudit(append = false) {
   auditLoading.value = true
   try {
-    const rows = await call('lumenpos.api.audit.list_logs', {
+    const rows = await call('esafe_salesrep.api.audit.list_logs', {
       action: auditFilter.value.action || undefined,
       from_date: auditFilter.value.from_date || undefined,
       to_date: auditFilter.value.to_date || undefined,
@@ -3282,7 +3282,7 @@ watch(activeTab, (tab) => {
   if (tab === 'System check' && !check.value) runCheck()
 })
 
-// ---- system check (lumenpos.api.system_check) ----
+// ---- system check (esafe_salesrep.api.system_check) ----
 const check = ref(null)
 const checking = ref(false)
 const checkError = ref('')
@@ -3305,7 +3305,7 @@ async function runCheck() {
   checking.value = true
   checkError.value = ''
   try {
-    check.value = await call('lumenpos.api.system_check.run', {})
+    check.value = await call('esafe_salesrep.api.system_check.run', {})
   } catch (e) {
     checkError.value = e.message || String(e)
   } finally {
@@ -3320,7 +3320,7 @@ async function copyCheck() {
   const v = c.versions
   const lines = [
     t('System check') + ', ' + c.site + ', ' + c.checked_at,
-    'EsafePOS ' + v.lumenpos + ', ERPNext ' + v.erpnext + ', Frappe ' + v.frappe + ', Python ' + v.python,
+    'Esafe-SalesRep ' + v.esafe_salesrep + ', ERPNext ' + v.erpnext + ', Frappe ' + v.frappe + ', Python ' + v.python,
   ]
   for (const area of CHECK_AREAS) {
     const rows = checkRows(area.key)
@@ -3377,7 +3377,7 @@ async function load() {
   shellReady.value = Boolean(navigator.serviceWorker && navigator.serviceWorker.controller)
   loadIndexHealth()
   if (session.offline) return
-  const info = await call('lumenpos.api.settings.get_settings')
+  const info = await call('esafe_salesrep.api.settings.get_settings')
   settingsInfo.value = info
   reasonKeys.value = [...(info.variance_reasons || []), ...(info.return_reasons || [])]
   profileReceiptOverrides.value = info.profile_receipt_overrides || []
@@ -3429,11 +3429,11 @@ async function load() {
     carry_shift_past_midnight: info.carry_shift_past_midnight === 0 ? 0 : 1,
     // And before 0.58.1.
     warn_locked_periods: info.warn_locked_periods === 0 ? 0 : 1,
-    // And before 0.59.0 (lumenpos.variance).
+    // And before 0.59.0 (esafe_salesrep.variance).
     variance_reason_mode: info.variance_reason_mode || 'Optional',
     variance_reason_threshold: info.variance_reason_threshold || 0,
     variance_reasons: [...(info.variance_reasons || [])],
-    // And before 0.60.0 (lumenpos.credit_sales).
+    // And before 0.60.0 (esafe_salesrep.credit_sales).
     credit_sales_enabled: info.credit_sales_enabled ? 1 : 0,
     credit_customers: info.credit_customers || 'Customers allowed on their card',
     credit_default_limit: info.credit_default_limit || 0,
@@ -3530,14 +3530,14 @@ async function load() {
   if ((info.companies || []).length && !info.companies.includes(selectedCompany.value)) {
     selectedCompany.value = info.companies[0]
   }
-  promotions.value = await call('lumenpos.api.settings.list_promotions')
+  promotions.value = await call('esafe_salesrep.api.settings.list_promotions')
   if (perms.value.cashback?.read) {
-    cashbackRules.value = await call('lumenpos.api.settings.list_cashback_rules').catch(() => [])
+    cashbackRules.value = await call('esafe_salesrep.api.settings.list_cashback_rules').catch(() => [])
     loadCashbackAccounting()
   }
-  priceBooks.value = await call('lumenpos.api.settings.list_price_books')
-  bundles.value = await call('lumenpos.api.settings.list_bundles')
-  loyaltyPrograms.value = await call('lumenpos.api.settings.list_loyalty_programs').catch(() => [])
+  priceBooks.value = await call('esafe_salesrep.api.settings.list_price_books')
+  bundles.value = await call('esafe_salesrep.api.settings.list_bundles')
+  loyaltyPrograms.value = await call('esafe_salesrep.api.settings.list_loyalty_programs').catch(() => [])
   loadGiftCards()
   if (perms.value.settings) loadReturnRestrictions()
 }
@@ -3546,12 +3546,12 @@ async function load() {
 async function saveLoyalty() {
   saving.value = true
   try {
-    await call('lumenpos.api.settings.create_loyalty_program', {
+    await call('esafe_salesrep.api.settings.create_loyalty_program', {
       payload: { ...loyaltyForm.value, company: loyaltyForm.value.company || session.company },
     })
     session.notify(t('Loyalty program created, earning starts on the next sale'))
     creatingLoyalty.value = false
-    loyaltyPrograms.value = await call('lumenpos.api.settings.list_loyalty_programs')
+    loyaltyPrograms.value = await call('esafe_salesrep.api.settings.list_loyalty_programs')
   } catch (e) {
     session.notify(e.message, true)
   } finally {
@@ -3565,7 +3565,7 @@ function debouncedLoadCards() {
 }
 
 async function loadGiftCards() {
-  giftCardList.value = await call('lumenpos.api.settings.list_gift_cards', {
+  giftCardList.value = await call('esafe_salesrep.api.settings.list_gift_cards', {
     search: giftCardSearch.value,
   }).catch(() => [])
 }
@@ -3573,7 +3573,7 @@ async function loadGiftCards() {
 async function disableCard(card) {
   if (!confirm(t('Disable gift card {card}? Its remaining balance becomes unusable.', { card: card.card_no }))) return
   try {
-    await call('lumenpos.api.settings.disable_gift_card', { card_no: card.card_no })
+    await call('esafe_salesrep.api.settings.disable_gift_card', { card_no: card.card_no })
     loadGiftCards()
   } catch (e) {
     session.notify(e.message, true)
@@ -3648,10 +3648,10 @@ async function saveBundle() {
   try {
     const payload = JSON.parse(JSON.stringify(bundleForm.value))
     payload.items = payload.items.filter((row) => row.item_code)
-    await call('lumenpos.api.settings.save_bundle', { payload })
+    await call('esafe_salesrep.api.settings.save_bundle', { payload })
     session.notify(t('Bundle saved'))
     editingBundle.value = false
-    bundles.value = await call('lumenpos.api.settings.list_bundles')
+    bundles.value = await call('esafe_salesrep.api.settings.list_bundles')
     session.bundles = bundles.value.filter((bundle) => bundle.status === 'Active')
   } catch (e) {
     session.notify(e.message, true)
@@ -3663,9 +3663,9 @@ async function saveBundle() {
 async function deleteBundle() {
   if (!confirm(t('Delete bundle "{title}"?', { title: bundleForm.value.title }))) return
   try {
-    await call('lumenpos.api.settings.delete_bundle', { name: bundleForm.value.name })
+    await call('esafe_salesrep.api.settings.delete_bundle', { name: bundleForm.value.name })
     editingBundle.value = false
-    bundles.value = await call('lumenpos.api.settings.list_bundles')
+    bundles.value = await call('esafe_salesrep.api.settings.list_bundles')
     session.bundles = bundles.value.filter((bundle) => bundle.status === 'Active')
   } catch (e) {
     session.notify(e.message, true)
@@ -3706,7 +3706,7 @@ async function loadCouponStats() {
   couponMsg.value = ''
   if (!promoForm.value.name) return
   try {
-    couponStats.value = await call('lumenpos.api.settings.list_coupons', {
+    couponStats.value = await call('esafe_salesrep.api.settings.list_coupons', {
       promotion: promoForm.value.name,
     })
   } catch {
@@ -3719,7 +3719,7 @@ async function generateCoupons() {
   couponBusy.value = true
   couponMsg.value = ''
   try {
-    const res = await call('lumenpos.api.settings.generate_coupons', {
+    const res = await call('esafe_salesrep.api.settings.generate_coupons', {
       promotion: promoForm.value.name,
       count: couponGen.value.count,
       prefix: couponGen.value.prefix || '',
@@ -3749,7 +3749,7 @@ function importCoupons(event) {
     couponBusy.value = true
     couponMsg.value = ''
     try {
-      const res = await call('lumenpos.api.settings.import_coupons', {
+      const res = await call('esafe_salesrep.api.settings.import_coupons', {
         promotion: promoForm.value.name,
         filename: file.name,
         content: reader.result,
@@ -3778,7 +3778,7 @@ function importCoupons(event) {
 async function exportCoupons() {
   couponBusy.value = true
   try {
-    const rows = await call('lumenpos.api.settings.export_coupons', { promotion: promoForm.value.name })
+    const rows = await call('esafe_salesrep.api.settings.export_coupons', { promotion: promoForm.value.name })
     const header = 'code,single_use,used,valid_until,batch\n'
     const body = rows
       .map((r) =>
@@ -3803,7 +3803,7 @@ async function deleteUnusedCoupons() {
   if (!confirm(t('Delete all unused coupons for this promotion?'))) return
   couponBusy.value = true
   try {
-    couponStats.value = await call('lumenpos.api.settings.delete_coupons', {
+    couponStats.value = await call('esafe_salesrep.api.settings.delete_coupons', {
       promotion: promoForm.value.name,
       only_unused: 1,
     })
@@ -3816,7 +3816,7 @@ async function deleteUnusedCoupons() {
 }
 
 async function editPromotion(name) {
-  const data = await call('lumenpos.api.settings.get_promotion', { name })
+  const data = await call('esafe_salesrep.api.settings.get_promotion', { name })
   data.items = (data.items || []).map((row) => ({
     applies_to: row.applies_to || 'Item',
     value: row.item_code || row.item_group || row.brand || row.tag || '',
@@ -3837,7 +3837,7 @@ async function runTest() {
   testing.value = true
   testResult.value = null
   try {
-    testResult.value = await call('lumenpos.api.settings.test_promotion', {
+    testResult.value = await call('esafe_salesrep.api.settings.test_promotion', {
       name: promoForm.value.name,
       pos_profile: session.posProfile,
       items: testBasket.value
@@ -3881,10 +3881,10 @@ async function savePromotion() {
         qty: row.qty,
         exclude: row.exclude ? 1 : 0,
       }))
-    await call('lumenpos.api.settings.save_promotion', { payload })
+    await call('esafe_salesrep.api.settings.save_promotion', { payload })
     session.notify(t('Promotion saved'))
     editingPromo.value = false
-    promotions.value = await call('lumenpos.api.settings.list_promotions')
+    promotions.value = await call('esafe_salesrep.api.settings.list_promotions')
     session.refreshPromotions()
   } catch (e) {
     session.notify(e.message, true)
@@ -3896,9 +3896,9 @@ async function savePromotion() {
 async function deletePromotion() {
   if (!confirm(t('Delete promotion "{title}"?', { title: promoForm.value.title }))) return
   try {
-    await call('lumenpos.api.settings.delete_promotion', { name: promoForm.value.name })
+    await call('esafe_salesrep.api.settings.delete_promotion', { name: promoForm.value.name })
     editingPromo.value = false
-    promotions.value = await call('lumenpos.api.settings.list_promotions')
+    promotions.value = await call('esafe_salesrep.api.settings.list_promotions')
     session.refreshPromotions()
   } catch (e) {
     session.notify(e.message, true)
@@ -3907,7 +3907,7 @@ async function deletePromotion() {
 
 // ---- cashback accounting ----
 async function loadCashbackAccounting() {
-  cashbackAccounting.value = await call('lumenpos.api.settings.cashback_accounting_status').catch(() => [])
+  cashbackAccounting.value = await call('esafe_salesrep.api.settings.cashback_accounting_status').catch(() => [])
 }
 
 // The server sends a state code, not text, so the note follows the POS language.
@@ -3922,7 +3922,7 @@ async function bookCashbackNow() {
   cashbackBookMsg.value = ''
   cashbackBookFailed.value = false
   try {
-    const res = await call('lumenpos.api.settings.post_cashback_to_gl')
+    const res = await call('esafe_salesrep.api.settings.post_cashback_to_gl')
     cashbackAccounting.value = res.status || []
     const posted = (res.posted || []).length
     const failed = (res.failed || []).length
@@ -3954,7 +3954,7 @@ function newCashbackRule() {
 }
 
 async function editCashbackRule(name) {
-  const data = await call('lumenpos.api.settings.get_cashback_rule', { name })
+  const data = await call('esafe_salesrep.api.settings.get_cashback_rule', { name })
   data.items = (data.items || []).map((row) => ({
     applies_to: row.applies_to || 'Item',
     value: row.item_code || row.item_group || row.brand || row.tag || '',
@@ -3987,10 +3987,10 @@ async function saveCashbackRule() {
         tag: row.applies_to === 'Tag' ? row.value : null,
         exclude: row.exclude ? 1 : 0,
       }))
-    await call('lumenpos.api.settings.save_cashback_rule', { payload })
+    await call('esafe_salesrep.api.settings.save_cashback_rule', { payload })
     session.notify(t('Cashback rule saved'))
     editingCashback.value = false
-    cashbackRules.value = await call('lumenpos.api.settings.list_cashback_rules')
+    cashbackRules.value = await call('esafe_salesrep.api.settings.list_cashback_rules')
   } catch (e) {
     session.notify(e.message, true)
   } finally {
@@ -4001,9 +4001,9 @@ async function saveCashbackRule() {
 async function deleteCashbackRule() {
   if (!confirm(t('Delete cashback rule "{title}"?', { title: cashbackForm.value.title }))) return
   try {
-    await call('lumenpos.api.settings.delete_cashback_rule', { name: cashbackForm.value.name })
+    await call('esafe_salesrep.api.settings.delete_cashback_rule', { name: cashbackForm.value.name })
     editingCashback.value = false
-    cashbackRules.value = await call('lumenpos.api.settings.list_cashback_rules')
+    cashbackRules.value = await call('esafe_salesrep.api.settings.list_cashback_rules')
   } catch (e) {
     session.notify(e.message, true)
   }
@@ -4048,7 +4048,7 @@ async function fetchBookItems() {
     if (bookFetch.value.by === 'Brand') args.brand = bookFetch.value.value
     else if (bookFetch.value.by === 'Item Group') args.item_group = bookFetch.value.value
     else args.tag = bookFetch.value.value
-    const rows = await call('lumenpos.api.settings.resolve_items', args)
+    const rows = await call('esafe_salesrep.api.settings.resolve_items', args)
     let added = 0
     for (const r of rows) {
       if (!bookForm.value.items.some((x) => x.item_code === r.item_code)) {
@@ -4116,7 +4116,7 @@ function importBookItems(event) {
     bookImporting.value = true
     bookImportReport.value = null
     try {
-      const res = await call('lumenpos.api.settings.parse_price_rows', {
+      const res = await call('esafe_salesrep.api.settings.parse_price_rows', {
         filename: file.name,
         content: reader.result,
       })
@@ -4164,7 +4164,7 @@ async function newAppPriceList(app) {
   )
   if (!name?.trim()) return
   try {
-    app.price_list = await call('lumenpos.api.settings.create_price_list', {
+    app.price_list = await call('esafe_salesrep.api.settings.create_price_list', {
       price_list_name: name.trim(),
     })
     session.notify(
@@ -4188,10 +4188,10 @@ async function saveBook() {
         .filter((r) => r.item_code)
         .map((r) => ({ item_code: r.item_code, rate: r.rate || 0 })),
     }
-    await call('lumenpos.api.settings.save_price_book', { payload })
+    await call('esafe_salesrep.api.settings.save_price_book', { payload })
     session.notify(t('Price book saved'))
     editingBook.value = false
-    priceBooks.value = await call('lumenpos.api.settings.list_price_books')
+    priceBooks.value = await call('esafe_salesrep.api.settings.list_price_books')
   } catch (e) {
     session.notify(e.message, true)
   } finally {
@@ -4202,9 +4202,9 @@ async function saveBook() {
 async function deleteBook() {
   if (!confirm(t('Delete price book "{title}"?', { title: bookForm.value.title }))) return
   try {
-    await call('lumenpos.api.settings.delete_price_book', { name: bookForm.value.name })
+    await call('esafe_salesrep.api.settings.delete_price_book', { name: bookForm.value.name })
     editingBook.value = false
-    priceBooks.value = await call('lumenpos.api.settings.list_price_books')
+    priceBooks.value = await call('esafe_salesrep.api.settings.list_price_books')
   } catch (e) {
     session.notify(e.message, true)
   }
@@ -4214,7 +4214,7 @@ async function deleteBook() {
 async function saveGeneral() {
   saving.value = true
   try {
-    const info = await call('lumenpos.api.settings.save_settings', {
+    const info = await call('esafe_salesrep.api.settings.save_settings', {
       payload: generalForm.value,
     })
     settingsInfo.value = info
@@ -4829,7 +4829,7 @@ button.sec-title.collapsible + * { margin-top: 14px; }
 .add-row { margin-top: 2px; }
 /* The reasons for a short or over, under their mode (0.59.0). */
 .vr-settings { margin: 0 0 14px; padding-inline-start: 2px; }
-/* Sales on account (0.60.0): how it works, and what EsafePOS set up. */
+/* Sales on account (0.60.0): how it works, and what Esafe-SalesRep set up. */
 .how-box {
   margin-top: 16px;
   padding: 12px 14px;

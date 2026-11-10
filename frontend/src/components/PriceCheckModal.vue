@@ -1,6 +1,6 @@
 <!-- Copyright (c) 2026 Esafe (PVT) LTD
      SPDX-License-Identifier: AGPL-3.0-only
-     "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
+     "Esafe-SalesRep" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
 <template>
   <div class="modal-backdrop" @click.self="$emit('close')">
     <div class="modal price-check">
@@ -107,7 +107,7 @@ async function toggleWarehouses(m) {
   warehouses.value = []
   whLoading.value = true
   try {
-    warehouses.value = await call('lumenpos.api.catalog.stock_by_warehouse', {
+    warehouses.value = await call('esafe_salesrep.api.catalog.stock_by_warehouse', {
       item_code: m.item_code,
       pos_profile: session.posProfile,
     })
@@ -142,7 +142,7 @@ async function lookup() {
   loading.value = true
   lastQuery.value = q
   try {
-    const res = await call('lumenpos.api.catalog.price_check', {
+    const res = await call('esafe_salesrep.api.catalog.price_check', {
       pos_profile: session.posProfile,
       query: q,
     })

@@ -1,6 +1,6 @@
 // Copyright (c) 2026 Esafe (PVT) LTD
 // SPDX-License-Identifier: AGPL-3.0-only
-// "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md.
+// "Esafe-SalesRep" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md.
 //
 // Barcodes for printed labels (0.67.0), drawn as SVG with no library: EAN-13,
 // UPC-A (an EAN-13 with a leading 0) and Code 128 (sets B and C). `encode` gives

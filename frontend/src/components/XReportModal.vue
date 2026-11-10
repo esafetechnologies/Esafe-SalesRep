@@ -1,6 +1,6 @@
 <!-- Copyright (c) 2026 Esafe (PVT) LTD
      SPDX-License-Identifier: AGPL-3.0-only
-     "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
+     "Esafe-SalesRep" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
 <template>
   <div class="modal-backdrop" @click.self="$emit('close')">
     <div class="modal" style="width: 420px">
@@ -64,7 +64,7 @@
             </div>
           </div>
 
-          <!-- Who sold what on this shift (lumenpos.api.salespeople.shift_rows). -->
+          <!-- Who sold what on this shift (esafe_salesrep.api.salespeople.shift_rows). -->
           <div v-if="s.salespeople?.length" class="xr-section">
             <div class="xr-sub">{{ t('By salesperson') }}</div>
             <div v-for="r in s.salespeople" :key="r.sales_person || '-'" class="row">
@@ -106,7 +106,7 @@ defineEmits(['close'])
 
 const session = useSessionStore()
 const s = computed(() => props.summary)
-// Totals are in the company currency; each drawer in its own (lumenpos.currency).
+// Totals are in the company currency; each drawer in its own (esafe_salesrep.currency).
 const local = computed(() => props.summary.company_currency || session.localCurrency)
 const rates = computed(() =>
   Object.entries(props.summary.rates || {}).map(([currency, rate]) => ({

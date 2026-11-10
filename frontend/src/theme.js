@@ -1,11 +1,11 @@
 // Copyright (c) 2026 Esafe (PVT) LTD
 // SPDX-License-Identifier: AGPL-3.0-only
-// "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md.
+// "Esafe-SalesRep" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md.
 // Light/dark theme: persisted in localStorage, applied as data-theme on
 // <html>. Defaults to the OS preference on first run.
 import { ref } from 'vue'
 
-const KEY = 'lumenpos-theme'
+const KEY = 'esafe-salesrep-theme'
 
 function initial() {
   const saved = localStorage.getItem(KEY)
@@ -21,12 +21,12 @@ export function applyTheme() {
 
 export function toggleTheme() {
   theme.value = theme.value === 'dark' ? 'light' : 'dark'
-  localStorage.setItem(KEY, theme.value) // explicit EsafePOS choice, wins over ERPNext
+  localStorage.setItem(KEY, theme.value) // explicit Esafe-SalesRep choice, wins over ERPNext
   applyTheme()
 }
 
 // Follow the user's ERPNext desk theme (Light / Dark / Automatic) unless they
-// have explicitly toggled the theme inside EsafePOS on this device.
+// have explicitly toggled the theme inside Esafe-SalesRep on this device.
 export function syncFromErp(deskTheme) {
   if (localStorage.getItem(KEY)) return
   if (deskTheme === 'Dark') theme.value = 'dark'

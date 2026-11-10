@@ -2,7 +2,7 @@
 <template>
   <div class="rep">
     <header class="rep-bar">
-      <router-link class="rep-brand" to="/">Esafe <span>Sales Rep</span></router-link>
+      <router-link class="rep-brand" to="/">Esafe-<span>SalesRep</span></router-link>
       <nav aria-label="Sales workspace">
         <router-link to="/">Catalog</router-link>
         <router-link v-if="access('quotation', 'read')" to="/quotations">Quotations</router-link>
@@ -218,9 +218,9 @@ const access = (type, action) => !!setup.value?.documents[type]?.[action]
 const canSell = computed(() => access('quotation', 'post') || access('invoice', 'post'))
 const scope = (params = {}) => ({ pos_profile: profileName.value, ...params })
 const commands = {
-  post_document: (args, options) => call('lumenpos.api.sales_rep.post_document', args, options),
-  record_payment: (args, options) => call('lumenpos.api.sales_rep.record_payment', args, options),
-  check_in: (args, options) => call('lumenpos.api.sales_rep.check_in', args, options),
+  post_document: (args, options) => call('esafe_salesrep.api.sales_rep.post_document', args, options),
+  record_payment: (args, options) => call('esafe_salesrep.api.sales_rep.record_payment', args, options),
+  check_in: (args, options) => call('esafe_salesrep.api.sales_rep.check_in', args, options),
 }
 
 const error = ref('')
@@ -314,7 +314,7 @@ function salePayload() {
 async function loadSetup() {
   error.value = ''
   try {
-    setup.value = await call('lumenpos.api.sales_rep.bootstrap')
+    setup.value = await call('esafe_salesrep.api.sales_rep.bootstrap')
     kind.value = access('quotation', 'post') ? 'quotation' : 'invoice'
     profileName.value = setup.value.profiles[0]?.name || ''
   } catch (e) {
@@ -327,7 +327,7 @@ async function loadPage(more = false) {
   loading.value = true
   try {
     if (page.value === 'catalog') {
-      const result = await call('lumenpos.api.sales_rep.catalog', scope({
+      const result = await call('esafe_salesrep.api.sales_rep.catalog', scope({
         search: query.value, brand: brand.value, item_group: group.value,
         customer: customer.value?.name, start: more ? catalog.value.items.length : 0,
       }))
@@ -337,8 +337,8 @@ async function loadPage(more = false) {
     } else {
       const start = more ? records.value.length : 0
       const result = page.value === 'activity'
-        ? await call('lumenpos.api.sales_rep.list_activity', scope({ team: Number(team.value), start }))
-        : await call('lumenpos.api.sales_rep.list_documents', scope({
+        ? await call('esafe_salesrep.api.sales_rep.list_activity', scope({ team: Number(team.value), start }))
+        : await call('esafe_salesrep.api.sales_rep.list_documents', scope({
           kind: page.value === 'invoices' ? 'invoice' : 'quotation',
           search: documentSearch.value, due_only: Number(dueOnly.value), start,
           item_code: soldItem.value, brand: soldBrand.value, team: Number(team.value),
@@ -363,7 +363,7 @@ watch(profileName, async name => {
   soldBrand.value = ''
   filters.value = { brand: [], item_group: [] }
   try {
-    const result = await call('lumenpos.api.sales_rep.catalog_filters', scope())
+    const result = await call('esafe_salesrep.api.sales_rep.catalog_filters', scope())
     if (name === profileName.value) filters.value = result
   } catch (e) {
     if (name === profileName.value) error.value = e.message
@@ -389,7 +389,7 @@ watch([customerSearch, profileName], ([search, name]) => {
   if (!name || customer.value || search.trim().length < 2) return
   customerTimer = setTimeout(async () => {
     try {
-      const result = await call('lumenpos.api.sales_rep.customers', scope({ search }))
+      const result = await call('esafe_salesrep.api.sales_rep.customers', scope({ search }))
       if (name === profileName.value && search === customerSearch.value && !customer.value) {
         matches.value = result
         customerSearched.value = true
@@ -411,7 +411,7 @@ async function review() {
   const payload = salePayload()
   const target = kind.value
   try {
-    const result = await call('lumenpos.api.sales_rep.preview', scope({ kind: target, payload }))
+    const result = await call('esafe_salesrep.api.sales_rep.preview', scope({ kind: target, payload }))
     if (target === kind.value && JSON.stringify(payload) === JSON.stringify(salePayload())) estimate.value = result
   } catch (e) {
     error.value = e.message
@@ -487,7 +487,7 @@ async function openPayment(row) {
   busy.value = true
   error.value = ''
   try {
-    const result = await call('lumenpos.api.sales_rep.payment_options', scope({ invoice: row.name }))
+    const result = await call('esafe_salesrep.api.sales_rep.payment_options', scope({ invoice: row.name }))
     paymentError.value = ''
     payment.value = { ...result, invoice: row.name, amount: result.outstanding, mode: result.modes[0]?.name || '', reference: '' }
     paymentDialog.value.showModal()

@@ -1,10 +1,10 @@
 <!-- Copyright (c) 2026 Esafe (PVT) LTD
      SPDX-License-Identifier: AGPL-3.0-only
-     "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
+     "Esafe-SalesRep" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
 <template>
   <div class="insights">
     <!-- A tab for each report the person may see: the sales summary and the
-         cashiers (0.62.0), the EsafePOS Reports dashboard (managers) and the
+         cashiers (0.62.0), the Esafe-SalesRep Reports dashboard (managers) and the
          salesperson report. One of them alone shows without a tab bar. -->
     <div v-if="tabs.length > 1" class="ins-tabs">
       <button
@@ -41,12 +41,12 @@
       <button class="btn btn-primary" @click="load">{{ t('Retry') }}</button>
     </div>
 
-    <!-- The dashboard, embedded from EsafePOS Reports -->
+    <!-- The dashboard, embedded from Esafe-SalesRep Reports -->
     <div v-else-if="board" class="board">
       <div class="board-bar">
         <span class="board-title">{{ t('Sales dashboard') }}</span>
         <a class="btn small-btn" :href="board.open" target="_blank" rel="noopener">
-          {{ t('Open in EsafePOS Reports') }}
+          {{ t('Open in Esafe-SalesRep Reports') }}
         </a>
       </div>
       <iframe class="board-frame" :src="board.embed" :title="t('Sales dashboard')"></iframe>
@@ -97,7 +97,7 @@ const tabs = computed(() =>
   ].filter(Boolean)
 )
 // The tab last opened on this device, a convenience only.
-const TAB_KEY = 'lumenpos-insights-tab'
+const TAB_KEY = 'esafe-salesrep-insights-tab'
 const active = ref(null)
 let dashboardLoaded = false
 
@@ -132,11 +132,11 @@ const ChartMark = () =>
     }),
   ])
 
-// EsafePOS Reports builds its dashboard in English or Arabic. A till in any other
+// Esafe-SalesRep Reports builds its dashboard in English or Arabic. A till in any other
 // language gets the English one.
 const reportsLang = computed(() => (locale.value === 'ar' ? 'ar' : 'en'))
 
-// When EsafePOS Reports says the current user may view it, show the embedded
+// When Esafe-SalesRep Reports says the current user may view it, show the embedded
 // dashboard. Its language and theme follow the till.
 const board = computed(() => {
   const lr = info.value && info.value.lr
@@ -153,7 +153,7 @@ const view = computed(() => {
     return {
       title: t('Sales dashboard'),
       body: t(
-        'EsafePOS Reports needs Frappe v{version} or newer. This site runs an older version, so the dashboard is not available here.',
+        'Esafe-SalesRep Reports needs Frappe v{version} or newer. This site runs an older version, so the dashboard is not available here.',
         { version: i.min_frappe || 14 },
       ),
     }
@@ -162,26 +162,26 @@ const view = computed(() => {
     return {
       title: t('Get the full picture of your sales'),
       body: t(
-        'Install the EsafePOS Reports app to see a complete sales dashboard here: revenue by day and by outlet, payment mix, top items and more, with filters, all inside EsafePOS.',
+        'Install the Esafe-SalesRep Reports app to see a complete sales dashboard here: revenue by day and by outlet, payment mix, top items and more, with filters, all inside Esafe-SalesRep.',
       ),
-      hint: t('EsafePOS Reports is available on the Frappe Cloud Marketplace, or through hello@esafe.lk.'),
+      hint: t('Esafe-SalesRep Reports is available on the Frappe Cloud Marketplace, or through hello@esafe.lk.'),
     }
   }
   if (!i.integration_ready) {
     return {
       title: t('Sales dashboard'),
       body: t(
-        'EsafePOS Reports is installed, but this version does not include the EsafePOS dashboard yet. Update EsafePOS Reports, then come back.',
+        'Esafe-SalesRep Reports is installed, but this version does not include the Esafe-SalesRep dashboard yet. Update Esafe-SalesRep Reports, then come back.',
       ),
       refresh: true,
     }
   }
   const lr = i.lr || {}
-  // EsafePOS Reports' own status call failed: say so, with its error as the detail.
+  // Esafe-SalesRep Reports' own status call failed: say so, with its error as the detail.
   if (i.lr_error) {
     return {
       title: t('Sales dashboard'),
-      body: t('EsafePOS Reports could not report its status on this site.'),
+      body: t('Esafe-SalesRep Reports could not report its status on this site.'),
       hint: i.lr_error,
       refresh: true,
     }
@@ -198,7 +198,7 @@ const view = computed(() => {
     return {
       title: t('One permission away'),
       body: t(
-        'The dashboard is ready. To open it, an administrator grants this user the Lumen Restricted Viewer role in EsafePOS Reports.',
+        'The dashboard is ready. To open it, an administrator grants this user the Lumen Restricted Viewer role in Esafe-SalesRep Reports.',
       ),
       refresh: true,
     }
@@ -207,24 +207,24 @@ const view = computed(() => {
     if (lr.can_create) {
       return {
         title: t('Sales dashboard'),
-        body: t('EsafePOS Reports is installed. One step left: create the ready-made POS sales dashboard.'),
+        body: t('Esafe-SalesRep Reports is installed. One step left: create the ready-made POS sales dashboard.'),
         action: t('Create the sales dashboard'),
       }
     }
     return {
       title: t('Sales dashboard'),
       body: t(
-        'EsafePOS Reports is installed. An administrator with Lumen Builder or Lumen Manager opens this page once to create the dashboard.',
+        'Esafe-SalesRep Reports is installed. An administrator with Lumen Builder or Lumen Manager opens this page once to create the dashboard.',
       ),
       refresh: true,
     }
   }
-  // A reason this page does not know (a newer EsafePOS Reports may add one), or no
+  // A reason this page does not know (a newer Esafe-SalesRep Reports may add one), or no
   // reason and still no access. Never a silent "Loading…": say it plainly and show
-  // EsafePOS Reports' own message when it sends one.
+  // Esafe-SalesRep Reports' own message when it sends one.
   return {
     title: t('Sales dashboard'),
-    body: t('EsafePOS Reports cannot show the dashboard on this site right now.'),
+    body: t('Esafe-SalesRep Reports cannot show the dashboard on this site right now.'),
     hint: lr.message || null,
     refresh: true,
   }
@@ -234,7 +234,7 @@ async function load() {
   loading.value = true
   error.value = ''
   try {
-    info.value = await call('lumenpos.api.insights.status')
+    info.value = await call('esafe_salesrep.api.insights.status')
   } catch (e) {
     error.value = e.message || String(e)
   } finally {
@@ -246,7 +246,7 @@ async function create() {
   working.value = true
   actionError.value = ''
   try {
-    info.value = await call('lumenpos.api.insights.ensure_dashboard', { lang: reportsLang.value })
+    info.value = await call('esafe_salesrep.api.insights.ensure_dashboard', { lang: reportsLang.value })
   } catch (e) {
     actionError.value = e.message || String(e)
   } finally {

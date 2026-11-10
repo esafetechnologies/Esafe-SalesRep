@@ -1,4 +1,4 @@
-# Esafe Sales Rep for ERPNext / Frappe
+# Esafe-SalesRep for ERPNext / Frappe
 
 `/pos` opens the sales-rep workspace for product browsing, quotations, invoicing
 on account, payment collection, and location check-ins. See the
@@ -22,7 +22,7 @@ flag, an **in-POS Settings page** (promotions, price books, channels,
 discount approval, Vend Setup style), **manager-passcode discount approval**,
 Individual/Company customer creation (tax ID + national address for
 companies), salesperson search by name or number, a **local-first catalog**
-(IndexedDB-served search, near-instant), and a **EsafePOS workspace** in the
+(IndexedDB-served search, near-instant), and a **Esafe-SalesRep workspace** in the
 ERPNext desk. Brand accent color: `#2E5BFF`.
 
 - Till at **`/pos#/till`**: product grid + search/barcode, cart with live
@@ -69,7 +69,7 @@ ERPNext desk. Brand accent color: `#2E5BFF`.
   which sold serials are coming back. Serialized items can't be sold offline.
 - Sales post as standard **Sales Invoices** (`is_pos = 1`) so stock, GL and
   reports work exactly as ERPNext expects. Applied promotions are stored on
-  the invoice (`lumenpos_promotions`) for auditing.
+  the invoice (`esafe_salesrep_promotions`) for auditing.
 
 ## Requirements
 
@@ -79,13 +79,13 @@ ERPNext desk. Brand accent color: `#2E5BFF`.
 
 ## Install
 
-The frontend ships pre-built (`lumenpos/public/pos`), so the bench does **not**
+The frontend ships pre-built (`esafe_salesrep/public/pos`), so the bench does **not**
 need Node or npm:
 
 ```bash
 cd frappe-bench
-bench get-app https://github.com/ma7mod7osam/lumenpos
-bench --site yoursite install-app lumenpos
+bench get-app https://github.com/esafetechnologies/Esafe-SalesRep
+bench --site yoursite install-app esafe_salesrep
 bench --site yoursite clear-cache
 ```
 
@@ -122,14 +122,14 @@ Discounts never exceed the line/basket total.
 ## Architecture
 
 ```
-lumenpos/
-├── lumenpos/
+esafe_salesrep/
+├── esafe_salesrep/
 │   ├── promotions/
 │   │   ├── engine.py        # pure evaluation engine (no Frappe imports)
 │   │   ├── loader.py        # POS Promotion -> engine dicts
 │   │   └── test_engine.py   # standalone unit tests
 │   ├── api/                 # whitelisted endpoints (session, catalog, sales, register)
-│   ├── lumenpos/doctype/        # POS Promotion (+children), POS Register Session, POS Parked Sale
+│   ├── esafe_salesrep/doctype/        # POS Promotion (+children), POS Register Session, POS Parked Sale
 │   └── www/pos.html         # serves the built SPA at /pos
 └── frontend/                # Vue 3 + Vite + Pinia
     └── src/promotions.js    # JS mirror of engine.py (instant cart feedback)
@@ -141,7 +141,7 @@ only one that is trusted. `frontend/parity-check.mjs` runs the same scenarios
 through the JS engine that `test_engine.py` covers in Python:
 
 ```bash
-python -m unittest lumenpos.promotions.test_engine   # from the app root
+python -m unittest esafe_salesrep.promotions.test_engine   # from the app root
 node parity-check.mjs                            # from frontend/
 ```
 
@@ -180,7 +180,7 @@ npm run dev    # Vite dev server on :8080, proxies /api to a bench on :8000
 
 Copyright (c) 2026 Esafe (PVT) LTD.
 
-EsafePOS is licensed under the **GNU Affero General Public License v3.0**
+Esafe-SalesRep is licensed under the **GNU Affero General Public License v3.0**
 (`AGPL-3.0-only`). See [license.txt](license.txt).
 
 You may use, study and modify it. If you distribute it, or run a modified version
@@ -188,7 +188,7 @@ as a network service, you must offer your complete source code to the people who
 receive or use it, under the same licence, and keep every copyright notice. It
 may not be relicensed or resold as closed-source software.
 
-ERPNext is GPLv3 and EsafePOS calls its code directly. The GPLv3 and the AGPLv3
+ERPNext is GPLv3 and Esafe-SalesRep calls its code directly. The GPLv3 and the AGPLv3
 each permit combining with the other (section 13 of both), so the two remain
 compatible. AGPL-3.0 is accepted on the Frappe Cloud Marketplace.
 
@@ -202,6 +202,6 @@ hello@esafe.lk.
 
 ## Trademarks
 
-"EsafePOS" and the EsafePOS logo are trademarks of Esafe (PVT) LTD. The code
+"Esafe-SalesRep" and the Esafe-SalesRep logo are trademarks of Esafe (PVT) LTD. The code
 licence does not grant permission to use them. Forks and modified versions must
 use a different name and logo. See [TRADEMARKS.md](TRADEMARKS.md).

@@ -1,6 +1,6 @@
 <!-- Copyright (c) 2026 Esafe (PVT) LTD
      SPDX-License-Identifier: AGPL-3.0-only
-     "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
+     "Esafe-SalesRep" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
 <template>
   <div class="modal-backdrop" @click.self="$emit('close')">
     <div class="modal" style="width: 440px">
@@ -76,7 +76,7 @@ async function sell() {
   }
   busy.value = true
   try {
-    const receipt = await call('lumenpos.api.sales.sell_gift_card', {
+    const receipt = await call('esafe_salesrep.api.sales.sell_gift_card', {
       payload: {
         pos_profile: session.posProfile,
         amount: amount.value,

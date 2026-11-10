@@ -1,6 +1,6 @@
 // Copyright (c) 2026 Esafe (PVT) LTD
 // SPDX-License-Identifier: AGPL-3.0-only
-// "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md.
+// "Esafe-SalesRep" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md.
 let currency = 'USD'
 
 export function setCurrency(code) {
@@ -20,7 +20,7 @@ export function isolate(text) {
 }
 
 // `code` names the currency when it is not the outlet's: a sale to a customer
-// billed in another currency, or a drawer that holds one (lumenpos.currency).
+// billed in another currency, or a drawer that holds one (esafe_salesrep.currency).
 export function money(amount, code) {
   const unit = code || currency
   let formatted

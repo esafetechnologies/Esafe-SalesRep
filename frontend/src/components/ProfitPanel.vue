@@ -1,10 +1,10 @@
 <!-- Copyright (c) 2026 Esafe (PVT) LTD
      SPDX-License-Identifier: AGPL-3.0-only
-     "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
+     "Esafe-SalesRep" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
 <!-- The Profit tab of Insights (0.62.0): net sales, the cost of the goods,
      the gross profit and the margin over a period, day by day and by item
      group, with the most and the least profitable items. For whoever may see
-     the profit (lumenpos.api.reports.profit decides). -->
+     the profit (esafe_salesrep.api.reports.profit decides). -->
 <template>
   <div class="rep">
     <div class="card rep-card">
@@ -126,7 +126,7 @@ async function load(args) {
   loading.value = true
   error.value = ''
   try {
-    report.value = await call('lumenpos.api.reports.profit', asked)
+    report.value = await call('esafe_salesrep.api.reports.profit', asked)
   } catch (e) {
     report.value = null
     error.value = e.message || String(e)

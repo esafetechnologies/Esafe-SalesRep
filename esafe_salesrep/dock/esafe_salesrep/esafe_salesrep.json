@@ -1,0 +1,23 @@
+{
+ "app": "esafe_salesrep",
+ "creation": "2026-10-17 15:00:00.000000",
+ "docstatus": 0,
+ "doctype": "Dock",
+ "idx": 0,
+ "items": [
+  {
+   "added": 0,
+   "hidden": 0,
+   "icon": "storefront-soft",
+   "link_to": "Esafe-SalesRep",
+   "link_type": "Sidebar",
+   "title": "Esafe-SalesRep"
+  }
+ ],
+ "modified": "2026-10-17 16:00:00.000000",
+ "modified_by": "Administrator",
+ "name": "esafe_salesrep",
+ "owner": "Administrator",
+ "standard": 1,
+ "user": ""
+}

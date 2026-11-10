@@ -1,8 +1,8 @@
 <!-- Copyright (c) 2026 Esafe (PVT) LTD
      SPDX-License-Identifier: AGPL-3.0-only
-     "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
+     "Esafe-SalesRep" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
 <template>
-  <!-- Where a rule applies (lumenpos.scope): the whole group, one company, or
+  <!-- Where a rule applies (esafe_salesrep.scope): the whole group, one company, or
        outlets chosen by name. A site with one company keeps the plain list. -->
   <div class="scope-picker">
     <div v-if="multi" class="segmented">

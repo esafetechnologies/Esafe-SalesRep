@@ -1,6 +1,6 @@
 <!-- Copyright (c) 2026 Esafe (PVT) LTD
      SPDX-License-Identifier: AGPL-3.0-only
-     "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
+     "Esafe-SalesRep" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
 <!-- The help of the screen in use (0.58.0): what to do there, step by step,
      a "Show me" where a tour exists, every tour this person may take, and
      what is new. Texts: help/content.js. -->
@@ -40,9 +40,9 @@
         </div>
 
         <button v-if="help.allNews.length" type="button" class="help-news-link" @click="help.showAllNews()">
-          <Icon name="star" /> {{ t('What is new in') }} EsafePOS
+          <Icon name="star" /> {{ t('What is new in') }} Esafe-SalesRep
         </button>
-        <p class="muted small help-version">EsafePOS {{ help.version }}</p>
+        <p class="muted small help-version">Esafe-SalesRep {{ help.version }}</p>
       </div>
     </aside>
   </div>

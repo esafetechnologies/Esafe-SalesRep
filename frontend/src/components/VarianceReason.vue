@@ -1,6 +1,6 @@
 <!-- Copyright (c) 2026 Esafe (PVT) LTD
      SPDX-License-Identifier: AGPL-3.0-only
-     "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
+     "Esafe-SalesRep" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
 <template>
   <div class="variance-reason" :class="{ needed: required }" data-tour="register-variance">
     <div class="vr-title">
@@ -42,7 +42,7 @@
 </template>
 
 <script setup>
-// A reason for a short or over at the close (lumenpos.variance, 0.59.0). The
+// A reason for a short or over at the close (esafe_salesrep.variance, 0.59.0). The
 // cashier writes it in their own words, or taps one of the shop's reasons
 // (kept as the shop wrote it, so it reads in each person's language), and can
 // say what was done about it. Used for the cashier's own close and for a

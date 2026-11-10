@@ -1,10 +1,10 @@
 <!-- Copyright (c) 2026 Esafe (PVT) LTD
      SPDX-License-Identifier: AGPL-3.0-only
-     "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
+     "Esafe-SalesRep" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
 <template>
   <nav class="rail" data-tour="nav-rail">
     <div class="logo">
-      <img :src="esafeMark" alt="Esafe New Gen POS" />
+      <img :src="esafeMark" alt="Esafe-SalesRep" />
     </div>
     <!-- The reports alone (0.65.0): Insights, the theme and the way back to ERPNext. -->
     <router-link v-if="!session.reportsOnly" to="/till" class="rail-item" exact-active-class="active">
@@ -110,7 +110,7 @@ async function refreshPending() {
   try {
     // No profile scoping, an approver sees every open-shift request they can
     // act on, even when their till is on a different POS profile than the cashier.
-    const rows = await call('lumenpos.api.approval_requests.pending_requests', {})
+    const rows = await call('esafe_salesrep.api.approval_requests.pending_requests', {})
     pendingCount.value = rows.length
   } catch {
     /* ignore, the badge is best-effort */

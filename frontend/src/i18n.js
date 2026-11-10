@@ -1,6 +1,6 @@
 // Copyright (c) 2026 Esafe (PVT) LTD
 // SPDX-License-Identifier: AGPL-3.0-only
-// "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md.
+// "Esafe-SalesRep" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md.
 // Lightweight i18n for the POS UI (no extra dependency).
 //
 // Translations are keyed by the ENGLISH source string, so a missing key simply
@@ -19,7 +19,7 @@ import { computed, ref } from 'vue'
 
 import { messages } from './messages'
 
-const KEY = 'lumenpos-locale'
+const KEY = 'esafe-salesrep-locale'
 
 // Every language the till speaks, named in itself, in the order ERPNext is used
 // in them (a study of public ERPNext sites and Frappe Cloud installs,

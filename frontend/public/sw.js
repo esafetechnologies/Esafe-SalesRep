@@ -1,6 +1,6 @@
 /* Copyright (c) 2026 Esafe (PVT) LTD
    SPDX-License-Identifier: AGPL-3.0-only
-   "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md.
+   "Esafe-SalesRep" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md.
 
    The till's service worker: it keeps the SHELL of the POS (the page, its
    script, its stylesheet, its fonts) on the device, so the app opens with no
@@ -27,9 +27,9 @@
 */
 
 const VERSION = new URL(self.location.href).searchParams.get('v') || 'dev'
-const CACHE = 'lumenpos-shell-' + VERSION
+const CACHE = 'esafe-salesrep-shell-' + VERSION
 const PAGE = '/pos'
-const ASSETS = '/assets/lumenpos/pos/'
+const ASSETS = '/assets/esafe_salesrep/pos/'
 const FONT_HOSTS = ['fonts.googleapis.com', 'fonts.gstatic.com']
 
 const SHELL = [
@@ -59,7 +59,7 @@ self.addEventListener('activate', (event) => {
       .then((names) =>
         Promise.all(
           names
-            .filter((name) => name.startsWith('lumenpos-shell-') && name !== CACHE)
+            .filter((name) => name.startsWith('esafe-salesrep-shell-') && name !== CACHE)
             .map((name) => caches.delete(name))
         )
       )
@@ -131,9 +131,9 @@ self.addEventListener('fetch', (event) => {
 // offline log. A request that fails leaves the rest for the next attempt,
 // which the browser schedules itself.
 
-const DB_NAME = 'lumenpos'
-const SYNC_TAG = 'lumenpos-queue'
-const UPLOAD_LOCK = 'lumenpos-queue-upload'
+const DB_NAME = 'esafe_salesrep'
+const SYNC_TAG = 'esafe-salesrep-queue'
+const UPLOAD_LOCK = 'esafe-salesrep-queue-upload'
 // The session is the till's problem, not a refusal: leave the entry queued.
 const SESSION_ERRORS = ['CSRFTokenError', 'SessionExpired', 'AuthenticationError']
 
@@ -274,7 +274,7 @@ async function post(method, body, csrf, lang) {
 async function sendQueue() {
   const db = await openTillDb()
   if (!db) return
-  const report = { type: 'lumenpos-queue', synced: 0, failed: 0, stock: {} }
+  const report = { type: 'esafe-salesrep-queue', synced: 0, failed: 0, stock: {} }
   try {
     if (!db.objectStoreNames.contains('queue')) return
     // The shop switched background sending off: the till sends it when open.
@@ -295,7 +295,7 @@ async function sendQueue() {
       if (local && !customers[payload.customer]) {
         const pending = await read(db, 'pending_customers', payload.customer)
         answer = pending
-          ? await post('lumenpos.api.catalog.resolve_pending_customer', { payload: pending.payload }, csrf, entry.lang)
+          ? await post('esafe_salesrep.api.catalog.resolve_pending_customer', { payload: pending.payload }, csrf, entry.lang)
           : { ok: false, status: 0, data: { exception: 'x: offline customer record is missing' } }
         if (answer.ok) customers[payload.customer] = answer.data.message && answer.data.message.name
       }
@@ -304,7 +304,7 @@ async function sendQueue() {
       }
       if (!local || customers[payload.customer]) {
         answer = await post(
-          isReturn ? 'lumenpos.api.sales.create_return' : 'lumenpos.api.sales.submit_sale',
+          isReturn ? 'esafe_salesrep.api.sales.create_return' : 'esafe_salesrep.api.sales.submit_sale',
           body,
           csrf,
           entry.lang

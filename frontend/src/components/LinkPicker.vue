@@ -1,6 +1,6 @@
 <!-- Copyright (c) 2026 Esafe (PVT) LTD
      SPDX-License-Identifier: AGPL-3.0-only
-     "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
+     "Esafe-SalesRep" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
 <template>
   <div class="picker" ref="root">
     <input
@@ -84,7 +84,7 @@ function onType(value) {
 async function search(term) {
   loading.value = true
   try {
-    results.value = await call('lumenpos.api.settings.link_options', {
+    results.value = await call('esafe_salesrep.api.settings.link_options', {
       doctype: props.doctype,
       search: term,
       ...props.filters,

@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # Copyright (c) 2026 Esafe (PVT) LTD
 # SPDX-License-Identifier: AGPL-3.0-only
-# "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md.
+# "Esafe-SalesRep" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md.
 """Release guard. Run before every ship. No bench/site needed.
 
 Catches the class of outage where the POS looks fine but whole screens are dead:
 
-  1. A frontend `call('lumenpos.api.x.y')` that points at a function which
+  1. A frontend `call('esafe_salesrep.api.x.y')` that points at a function which
      doesn't exist, or exists but is NOT whitelisted -> that screen 404s live.
   2. A PRIVATE helper (leading underscore) carrying @frappe.whitelist() ->
      silently published as a public endpoint.
@@ -25,7 +25,7 @@ import re
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-APP = ROOT / "lumenpos"
+APP = ROOT / "esafe_salesrep"
 FRONTEND = ROOT / "frontend" / "src"
 
 problems = []
@@ -38,7 +38,7 @@ def _decorators(node):
 # ---------------------------------------------------------------------------
 # Collect every python function: whitelist status, args, and decorator theft
 # ---------------------------------------------------------------------------
-whitelisted = set()      # "lumenpos.api.sales.submit_sale"
+whitelisted = set()      # "esafe_salesrep.api.sales.submit_sale"
 defined = set()
 defs_by_name = {}        # name -> [(argnames, has_kwargs)]
 
@@ -92,9 +92,9 @@ for path in APP.rglob("*.py"):
 
 
 # ---------------------------------------------------------------------------
-# Every frontend call('lumenpos...') must hit a whitelisted function
+# Every frontend call('esafe_salesrep...') must hit a whitelisted function
 # ---------------------------------------------------------------------------
-CALL_RE = re.compile(r"""call\(\s*['"](lumenpos\.[A-Za-z0-9_.]+)['"]""")
+CALL_RE = re.compile(r"""call\(\s*['"](esafe_salesrep\.[A-Za-z0-9_.]+)['"]""")
 
 if FRONTEND.exists():
     for path in list(FRONTEND.rglob("*.vue")) + list(FRONTEND.rglob("*.js")):

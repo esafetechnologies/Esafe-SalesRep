@@ -1,6 +1,6 @@
 <!-- Copyright (c) 2026 Esafe (PVT) LTD
      SPDX-License-Identifier: AGPL-3.0-only
-     "EsafePOS" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
+     "Esafe-SalesRep" is a trademark of Esafe (PVT) LTD. See TRADEMARKS.md. -->
 <template>
   <!-- Customer-facing display: a chrome-free second screen, no app shell and
        no bootstrap, it exchanges cart/customer details over BroadcastChannel. -->
@@ -11,9 +11,8 @@
     <div class="main">
       <header class="topbar">
         <div class="topbar-left">
-          <div class="brand-lockup" aria-label="Esafe New Gen POS">
-            <span class="brand-name">Esafe</span>
-            <span class="brand-product">New Gen POS</span>
+          <div class="brand-lockup" aria-label="Esafe-SalesRep">
+            <span class="brand-name">Esafe-SalesRep</span>
           </div>
           <span class="brand-divider" aria-hidden="true"></span>
           <div class="topbar-title">{{ pageTitle }}</div>
@@ -161,13 +160,13 @@
 
   <div v-else-if="!isDisplay && session.error" class="boot-error">
     <div class="card boot-card">
-      <h2>{{ t('EsafePOS could not start') }}</h2>
+      <h2>{{ t('Esafe-SalesRep could not start') }}</h2>
       <p>{{ session.error }}</p>
       <button class="btn btn-primary" @click="session.bootstrap()">{{ t('Retry') }}</button>
     </div>
   </div>
 
-  <div v-else class="boot-loading">{{ t('Loading EsafePOS…') }}</div>
+  <div v-else class="boot-loading">{{ t('Loading Esafe-SalesRep…') }}</div>
 </template>
 
 <script setup>
@@ -279,7 +278,7 @@ async function openXReport() {
   if (!session.registerSession || xreportLoading.value) return
   xreportLoading.value = true
   try {
-    xreportSummary.value = await call('lumenpos.api.register.get_session_summary', {
+    xreportSummary.value = await call('esafe_salesrep.api.register.get_session_summary', {
       session: session.registerSession.name,
     })
     xreportOpen.value = true

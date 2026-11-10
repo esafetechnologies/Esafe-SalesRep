@@ -98,8 +98,8 @@ The tree view does not show account types, account currencies, disabled status, 
 | --- | --- | --- |
 | Cash tender / register opening | Current Assets → Cash In Hand | Confirm this is a ledger account with Account Type **Cash**, currency LKR, and the Cash Mode of Payment for Weerakoon Agro maps to it. |
 | Card or bank transfer tender | Current Assets → Bank Accounts | Expand this group and choose the real bank ledger. Confirm Account Type **Bank**, currency LKR, and map each corresponding Mode of Payment to the correct ledger. |
-| Customer balances / due sales | Current Assets → Accounts Receivable | Confirm the customer control account is a ledger with Account Type **Receivable**. POS Credit Sale clearing is provisioned by EsafePOS when enabled. |
-| Store Credit refunds / redemption | Current Liabilities (collapsed) and current assets | The customer balance belongs in a liability ledger. EsafePOS uses a separate Bank-type clearing ledger for the payment method and journals the movement to the liability. Do not map the Mode of Payment directly to the liability ledger. |
+| Customer balances / due sales | Current Assets → Accounts Receivable | Confirm the customer control account is a ledger with Account Type **Receivable**. POS Credit Sale clearing is provisioned by Esafe-SalesRep when enabled. |
+| Store Credit refunds / redemption | Current Liabilities (collapsed) and current assets | The customer balance belongs in a liability ledger. Esafe-SalesRep uses a separate Bank-type clearing ledger for the payment method and journals the movement to the liability. Do not map the Mode of Payment directly to the liability ledger. |
 | Sales | Income → Direct Income → Sales | Confirm this is the intended sales income ledger used by the POS Profile / Item Group defaults. |
 | Stock and cost of goods sold | Current Assets → Stock Assets; Expenses → Direct Expenses → Stock Expenses | Expand both groups and confirm the stock, COGS, and stock adjustment accounts required by the inventory setup. |
 | Taxes | Current Assets → Tax Assets; Expenses → Indirect Expenses → Tax Expense | Expand and inspect tax ledgers and the POS Profile tax template. Actual tax accounts depend on the company’s tax setup. |
@@ -109,6 +109,6 @@ The tree view does not show account types, account currencies, disabled status, 
 - Child ledgers under Current Liabilities, Non-Current Liabilities, Bank Accounts, Loans and Advances, Stock Assets, Tax Assets, Investments, Indirect Income, and Stock Expenses.
 - Account Type, Account Currency, Is Group, and Disabled values for every account.
 - Weerakoon Agro’s Mode of Payment account rows and the Accounting tab of the **Finished Goods - ammar** POS Profile.
-- Any POS-specific accounts auto-created by EsafePOS (for example, Store Credit Clearing and POS Credit Sale Clearing).
+- Any POS-specific accounts auto-created by Esafe-SalesRep (for example, Store Credit Clearing and POS Credit Sale Clearing).
 
 Expand those groups and inspect the Mode of Payment / POS Profile forms before using this map to assign posting accounts.
